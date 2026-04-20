@@ -1,0 +1,14 @@
+---
+layout: layout.njk
+title: Courses
+---
+
+<h2>Courses</h2>
+
+<ul>
+  {% for course in collections.all %}
+    {% if course.url contains "courses" %}
+      <li><a href="{{ course.url }}">{{ course.data.title }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>
