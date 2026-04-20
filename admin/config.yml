@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/voyager-cyber
+  branch: main
+
+media_folder: "src/images"
+public_folder: "/images"
+
+collections:
+  - name: "courses"
+    label: "Courses"
+    folder: "src/courses"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Price", name: "price", widget: "number" }
+      - { label: "Start Date", name: "start_date", widget: "datetime" }
+      - { label: "Body", name: "body", widget: "markdown" }
