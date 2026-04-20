@@ -7,8 +7,12 @@ title: Courses
 
 <ul>
   {% for course in collections.all %}
-    {% if course.url contains "courses" %}
-      <li><a href="{{ course.url }}">{{ course.data.title }}</a></li>
+    {% if "courses" in course.url %}
+      <li>
+        <a href="{{ course.url }}">
+          {{ course.data.title }}
+        </a>
+      </li>
     {% endif %}
   {% endfor %}
 </ul>
