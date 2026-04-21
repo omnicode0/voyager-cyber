@@ -1,10 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Cyber Training</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyager Cyber | CompTIA Security+ Bootcamp</title>
+    <meta name="description" content="Achieve CompTIA Security+ certification in 5 weeks with live instruction tailored for working adults.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Cyber Training Site</h1>
-  <p>Coming soon.</p>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Voyager Cyber</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html">Pricing / Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary ms-lg-3" href="pricing.html">Enroll Now</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header id="hero" class="py-5 text-center bg-light border-bottom">
+        <div class="container py-5">
+            <h1 class="display-4 fw-bold">Pass CompTIA Security+ in 5 Weeks — Live Instruction</h1>
+            <p class="lead mb-4">Structured training designed for working professionals. Clear lessons, guided practice, and a direct path to Security+ certification.</p>
+            <a href="#pricing" class="btn btn-primary btn-lg">Enroll Now</a>
+        </div>
+    </header>
+
+    <section id="benefits" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Choose Voyager Cyber?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <h3 class="h5">Live Accountability</h3>
+                        <p>Experience real-time interactions with instructors who demand your attention and celebrate your successes.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <h3 class="h5">Expert Guidance</h3>
+                        <p>Learn from industry professionals who arm you with the skills to conquer every challenge in the field.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm p-4">
+                        <h3 class="h5">Career Acceleration</h3>
+                        <p>Fast-track your transition into cybersecurity with rocket fuel for your career launch.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Pricing Plans</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <h3 class="h5">Starter</h3>
+                            <div class="display-5 my-3">$999</div>
+                            <p class="text-muted">Includes live instruction, course materials, and practice exams. No voucher.</p>
+                            <a href="https://buy.stripe.com/STARTER_LINK" class="btn btn-outline-primary">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow border-primary">
+                        <div class="card-body text-center">
+                            <h3 class="h5">Professional</h3>
+                            <div class="display-5 my-3">$1,499</div>
+                            <p class="text-muted">Includes everything in Starter plus Security+ test voucher and free test retake.</p>
+                            <a href="https://buy.stripe.com/PROFESSIONAL_LINK" class="btn btn-primary">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <h3 class="h5">Career Accelerator</h3>
+                            <div class="display-5 my-3">$1,899</div>
+                            <p class="text-muted small">Includes Professional tier plus career counseling, resume review, and interview prep.</p>
+                            <a href="https://buy.stripe.com/ACCELERATOR_LINK" class="btn btn-outline-primary">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+            <div class="accordion mx-auto" id="faqAccordion" style="max-width: 800px;">
+                
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                            Do I need prior cybersecurity experience?
+                        </button>
+                    </h2>
+                    <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            No prior cybersecurity experience is required. The program is designed for beginners and career changers, with a structured approach that builds your knowledge step by step.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                            Will this help me get a job in cybersecurity?
+                        </button>
+                    </h2>
+                    <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            This program is designed to help you build the foundational knowledge needed for entry-level cybersecurity roles. The Security+ certification is widely recognized by employers, and the course focuses on practical understanding—not just memorization. Higher-tier plans also include career guidance to help you take the next step after certification.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                            How much time should I expect to commit each week?
+                        </button>
+                    </h2>
+                    <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Expect to spend 7 hours per week engaged in the classroom and 3-6 hours per week of self-study.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f4">
+                            What happens if I miss a class?
+                        </button>
+                    </h2>
+                    <div id="f4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Our sessions are recorded, ensuring you won't miss a beat.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-5 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-1">1-800-SECURITY | info@securitybootcamp.com</p>
+            <p class="mb-4">123 Security Lane, Tech City, ST 12345</p>
+            <hr class="bg-secondary">
+            <p class="small text-muted mb-0">© 2026 Security Bootcamp. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
