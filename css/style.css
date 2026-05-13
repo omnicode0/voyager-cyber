@@ -104,11 +104,13 @@ h2, .display-2 { font-size: 3rem; font-weight: 700; line-height: 1.2; }
     transition: all 0.3s ease;
 }
 
-#pricing .card-price {
-    font-size: 3.5rem;
+.card-price {
+    font-size: 2.8rem;
     font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 1rem;
+    color: #1f2937;
+    margin: 0.5rem 0 1rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
 }
 
 /* --- FAQ Accordion --- */
@@ -175,3 +177,14 @@ footer .text-muted {
   white-space: nowrap;
 }
 #cookie-banner button:hover { background: var(--primary-dark); }
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+}
+
+.enabled-link {
+    pointer-events: auto;
+    opacity: 1;
+}
