@@ -77,7 +77,14 @@
                                 <li class="mb-2">✓ Practice Exam Access</li>
                                 <li class="mb-2 text-muted">✕ Exam Voucher Not Included</li>
                             </ul>
-                            <a href="https://forms.gle/Qhwfc8QA8xuuU63T8" class="btn btn-outline-primary w-100 mt-auto">Join the Waitlist</a>
+                            <label>
+                                <input type="checkbox" class="agree-terms">
+                                I agree to the <a href="terms.html">Terms of Service</a>
+                            </label>
+                            <a href="https://buy.stripe.com/test_aFa5kE01mceK99ocRGdAk05"
+                            class="stripe-link btn btn-primary w-100 mt-auto disabled-link">
+                                Proceed to Payment
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -97,13 +104,12 @@
                                 <li class="mb-2">✓ Printed Study Guide</li>
                             </ul>
                             <label>
-                                <input type="checkbox" id="agreeTerms">
+                                <input type="checkbox" class="agree-terms">
                                 I agree to the <a href="terms.html">Terms of Service</a>
                             </label>
 
-                            <a id="stripeLink"
-                            href="https://forms.gle/Qhwfc8QA8xuuU63T8"
-                            class="btn btn-primary w-100 mt-auto disabled-link">
+                            <a href="https://buy.stripe.com/test_7sY28s7tOemSbhw7xmdAk03"
+                            class="stripe-link btn btn-primary w-100 mt-auto disabled-link">
                                 Proceed to Payment
                             </a>
                             <!-- <a href="https://forms.gle/Qhwfc8QA8xuuU63T8" class="btn btn-primary w-100 mt-auto">Join the Waitlist</a> -->
@@ -124,7 +130,15 @@
                                 <li class="mb-2">✓ Resume & LinkedIn Review</li>
                                 <li class="mb-2">✓ Mock Interview Prep</li>
                             </ul>
-                            <a href="https://forms.gle/Qhwfc8QA8xuuU63T8" class="btn btn-outline-primary w-100 mt-auto">Join the Waitlist</a>
+                            <label>
+                                <input type="checkbox" class="agree-terms">
+                                I agree to the <a href="terms.html">Terms of Service</a>
+                            </label>
+
+                            <a href="https://buy.stripe.com/test_aFa9AU01mceK4T82d2dAk04"
+                            class="stripe-link btn btn-primary w-100 mt-auto disabled-link">
+                                Proceed to Payment
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -212,11 +226,11 @@
 
     <footer id="contact" class="py-5 bg-dark text-white text-center">
         <div class="container">
-            <p class="mb-1">Voyager Cyber LLC</p>
+            <p class="mb-1">Voyager Career and Consulting LLC</p>
             <p class="mb-1">(402) 300-8935 | <a href="mailto:info@voyagercyber.com">info@voyagercyber.com</a></p>
             <p class="mb-0">663 N 132nd St, Suite 7209<br>Omaha, NE 68154</p>
             <hr class="border-secondary">
-            <p class="small text-muted mb-0">© 2026 Voyager Cyber LLC. All rights reserved.</p>
+            <p class="small text-muted mb-0">© 2026 Voyager Career and Consulting LLC. All rights reserved.</p>
             <p class="small mb-0">
                 <a href="privacy.html" class="text-muted me-3">Privacy Policy</a>
                 <a href="terms.html" class="text-muted me-3">Terms of Service</a>
@@ -246,24 +260,24 @@
 
         /* ADD THIS PART */
         document.addEventListener("DOMContentLoaded", function () {
-            const checkbox = document.getElementById("agreeTerms");
-            const link = document.getElementById("stripeLink");
+            document.querySelectorAll('.card-body').forEach(function (card) {
+                const checkbox = card.querySelector('.agree-terms');
+                const link = card.querySelector('.stripe-link');
+                if (!checkbox || !link) return;
 
-            if (!checkbox || !link) return;
-
-            function updateState() {
-                if (checkbox.checked) {
-                    link.classList.add("enabled-link");
-                    link.classList.remove("disabled-link");
-                } else {
-                    link.classList.add("disabled-link");
-                    link.classList.remove("enabled-link");
+                function updateState() {
+                    if (checkbox.checked) {
+                        link.classList.add('enabled-link');
+                        link.classList.remove('disabled-link');
+                    } else {
+                        link.classList.add('disabled-link');
+                        link.classList.remove('enabled-link');
+                    }
                 }
-            }
 
-            checkbox.addEventListener("change", updateState);
-
-            updateState(); // initialize state on page load
+                checkbox.addEventListener('change', updateState);
+                updateState();
+            });
         });
     </script>
 
