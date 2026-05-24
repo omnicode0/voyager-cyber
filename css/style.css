@@ -2,16 +2,18 @@
  * Restores original fonts, colors, and specific component layouts.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap');
-
 :root {
-    --primary: #6f94aa; /* Extracted from original hero overlay */
+    --primary: #6f94aa;
     --primary-dark: #5a7d91;
-    --dark: #232323;
-    --light: #f4f7f9;
-    --white: #ffffff;
-    --text-muted: #767676;
-    --font-main: 'Golos Text', sans-serif;
+    /* Override Bootstrap 5 CSS custom properties: */
+    --bs-primary: #6f94aa;
+    --bs-primary-rgb: 111, 148, 170;
+    --bs-primary-border-subtle: #b8cdd8;
+    --bs-primary-bg-subtle: #eaf0f4;
+    --bs-link-color: #6f94aa;
+    --bs-link-color-rgb: 111, 148, 170;
+    --bs-link-hover-color: #5a7d91;
+    /* rest of your variables */
 }
 
 body {

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us | Voyager Cyber</title>
     <meta name="description" content="Learn more about Voyager Cyber and our mission to help beginners and career changers pass the CompTIA Security+ exam through expert-led, live cybersecurity training.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="img/favicon.png">
@@ -26,9 +29,8 @@
                     <li class="nav-item"><a class="nav-link px-3 fw-bold active" href="about.html">About Us</a></li>
                     <li class="nav-item"><a class="nav-link px-3 fw-bold" href="courses.html">Courses</a></li>
                     <li class="nav-item"><a class="nav-link px-3 fw-bold" href="pricing.html">Pricing / Schedule</a></li>
-                    <li class="nav-item"><a class="nav-link px-3 fw-bold" href="refund.html">Refund Policy</a></li>                   
                     <li class="nav-item ms-lg-4">
-                        <a class="btn btn-primary rounded-pill px-4 py-2 fw-bold" href="pricing.html#book-training">Book Training</a>
+                        <a class="btn btn-primary rounded-pill px-4 py-2 fw-bold" href="pricing.html#enroll">Book Training</a>
                     </li>
                 </ul>
             </div>
@@ -47,7 +49,7 @@
                 <div class="col-lg-6">
                     <h2 class="display-5 fw-bold mb-4">Why Voyager Cyber Exists</h2>
                     <p class="mb-4">Most Security+ students don't fail because they aren't smart enough. They fail because humans often learn best from each other, in a structured way. Lacking both of these elements, self-paced courses leave students stuck, confused, and without anyone to turn to. While self-teaching is an effective learning method for some, for many, it is a path to confusion and disappointment.</p>
-                    <p class="mb-4">Voyager Cyber's 35-hour live bootcamp gives you a structured path, a real instructor, and accountability that self-study can't provide. Whether you're entering cybersecurity for the first time or pivoting from another IT role, our learning method get you exam-ready without the grinding inherent to exclusive self-study. </p>
+                    <p class="mb-4">Voyager Cyber's 35-hour live bootcamp gives you a structured path, a real instructor, and accountability that self-study can't provide. Whether you're entering cybersecurity for the first time or pivoting from another IT role, our learning method gets you exam-ready without the grinding inherent to exclusive self-study. </p>
                     <p>Over 70,000 job openings request Security+ certified professional, and Information Security Analysts earn a median salary of <strong>$124,910/year</strong>. Security+ is a respected certification that opens doors. At Voyager Cyber, we help you earn it.</p>
                 </div>
                 <div class="col-lg-6">
@@ -73,7 +75,7 @@
                                 <img src="img/instructor.webp" alt="Lead Instructor" class="img-fluid">
                             </div>
                         </div>
-                        <div style="max-width: 620px;">
+                        <div class="col-lg-6">
                 <h2 class="fw-bold mb-2">Meet Your Instructor</h2>
                 <p class="text-muted mb-4">
                     Former NSA Exploitation Analyst & U.S. Army Cyber Warfare Officer
@@ -84,7 +86,7 @@
                 </p>
 
                 <p class="mb-4">
-                    He previously supported national security cyber missions as an Exploitation Analyst and served as a Cyber Warfare Officer leading cyber operations teams within the U.S. Army. His background includes operational cybersecurity, networking, systems administration, risk assessment, and technical leadership.
+                    He previously supported national security cyber missions as an Exploitation Analyst and served as a Cyber Warfare Officer leading cyber operations teams within the U.S. Army. Additionally, Alex served as an adjunct instructor at National Cryptologic University, the educational arm of the NSA. His background includes operational cybersecurity, networking, systems administration, risk assessment, and technical leadership.
                 </p>
 
                 <div class="row g-3 mb-4">
@@ -138,33 +140,6 @@
         </div>
     </section>
 
-    <section class="py-5">
-        <div class="container text-center">
-            <h2 class="fw-bold mb-3">The Security+ Market Is Real</h2>
-            <p class="lead mb-5 mx-auto" style="max-width: 700px;">This isn't a niche certification. Security+ is the most widely recognized entry-level cybersecurity credential in the industry.</p>
-            <div class="row justify-content-center g-4">
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 h-100">
-                        <h3 class="display-6 fw-bold text-primary">1.7×</h3>
-                        <p class="text-muted small">Cyber jobs are growing 1.7× faster than the national average <em>(CompTIA State of the Tech Job Market 2026)</em></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 h-100">
-                        <h3 class="display-6 fw-bold text-primary">70,000+</h3>
-                        <p class="text-muted small">Job openings actively requesting Security+ certified candidates <em>(Cyberseek 2026)</em></p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 h-100">
-                        <h3 class="display-6 fw-bold text-primary">$124,910</h3>
-                        <p class="text-muted small">Median annual salary for Information Security Analysts <em>(Bureau of Labor Statistics 2024)</em></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="py-5 bg-primary text-white text-center">
         <div class="container">
             <h2 class="fw-bold mb-3">Ready to Get Certified?</h2>
@@ -189,11 +164,11 @@
     </footer>
 
     <div id="cookie-banner" style="display:none;">
-    <p class="mb-0">
-        This site uses cookies from third-party services (such as Google Forms) to function.
-        By continuing to use this site, you acknowledge this.
-        See our <a href="privacy.html">Privacy Policy</a> for details.
-    </p>
+        <p class="mb-0">
+        This site uses third-party services including Google (Forms, Calendar) and Stripe for 
+        payment processing. These services may set cookies or collect data per their own policies.
+        By continuing, you acknowledge this. See our <a href="privacy.html">Privacy Policy</a>.
+        </p>
     <button onclick="acceptCookies()">Got it</button>
     </div>
 
