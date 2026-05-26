@@ -91,10 +91,29 @@ h2, .display-2 { font-size: 3rem; font-weight: 700; line-height: 1.2; }
     border-color: var(--primary);
 }
 
-.btn-primary:hover {
+.btn-primary:not(:disabled):hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(111, 148, 170, 0.3);
+}
+
+.btn-primary:disabled,
+.btn-primary.disabled {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #fff !important;
+
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn-primary:disabled:hover,
+.btn-primary.disabled:hover {
+    background-color: #6c757d !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 /* --- Pricing Cards --- */
@@ -180,13 +199,41 @@ footer .text-muted {
 }
 #cookie-banner button:hover { background: var(--primary-dark); }
 
+/* --- Checkbox visibility & accessibility --- */
+.agree-terms {
+    width: 20px;
+    height: 20px;
+    transform: scale(1.12);
+    margin-right: 0.6rem;
+    accent-color: var(--bs-primary, var(--primary));
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+label.d-flex .agree-terms {
+    margin-top: 0.15rem;
+}
+
+.agree-terms:focus-visible {
+    outline: 3px solid rgba(111,148,170,0.22);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(111,148,170,0.06);
+}
+
+.agree-terms + .small,
+.agree-terms ~ .small {
+    cursor: pointer;
+}
+
 .disabled-link {
     pointer-events: none;
     opacity: 0.4;
     transition: opacity 0.2s ease;
+    cursor: not-allowed;
 }
 
 .enabled-link {
     pointer-events: auto;
     opacity: 1;
+    cursor: pointer;
 }

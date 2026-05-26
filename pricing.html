@@ -75,18 +75,19 @@
                                 <li class="mb-2">✓ Practice Exam Access</li>
                                 <li class="mb-2 text-muted">✕ Exam Voucher Not Included</li>
                             </ul>
-                            <label>
-                                <input type="checkbox" class="agree-terms">
-                                    <span class="small">I agree to the 
-                                    <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> 
-                                    and 
-                                    <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
-                                    </span>
+                            <label class="d-flex align-items-start gap-2 mb-3 text-start" style="cursor:pointer;">
+                            <input type="checkbox" class="agree-terms mt-1" style="flex-shrink:0;">
+                            <span class="small">I have read and agree to the 
+                                <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
+                                <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
+                            </span>
                             </label>
-                            <a href="https://buy.stripe.com/test_aFa5kE01mceK99ocRGdAk05"
-                            class="stripe-link btn btn-primary w-100 mt-auto disabled-link">
-                                Proceed to Payment
-                            </a>
+                            <button
+                            class="stripe-btn btn btn-primary w-100 mt-auto"
+                            data-href="https://buy.stripe.com/test_aFa5kE01mceK99ocRGdAk05"
+                            disabled>
+                            Proceed to Payment
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -105,20 +106,19 @@
                                 <li class="mb-2">✓ Exam Retake Support Included</li>
                                 <li class="mb-2">✓ Printed Study Guide</li>
                             </ul>
-                            <label>
-                                <input type="checkbox" class="agree-terms">
-                                    <span class="small">I agree to the 
-                                    <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> 
-                                    and 
-                                    <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
-                                    </span>
+                            <label class="d-flex align-items-start gap-2 mb-3 text-start" style="cursor:pointer;">
+                            <input type="checkbox" class="agree-terms mt-1" style="flex-shrink:0;">
+                            <span class="small">I have read and agree to the 
+                                <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
+                                <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
+                            </span>
                             </label>
-
-                            <a href="https://buy.stripe.com/test_7sY28s7tOemSbhw7xmdAk03"
-                            class="stripe-link btn btn-primary w-100 mt-auto disabled-link">
-                                Proceed to Payment
-                            </a>
-                            <!-- <a href="https://forms.gle/Qhwfc8QA8xuuU63T8" class="btn btn-primary w-100 mt-auto">Join the Waitlist</a> -->
+                            <button
+                            class="stripe-btn btn btn-primary w-100 mt-auto"
+                            data-href="https://buy.stripe.com/test_7sY28s7tOemSbhw7xmdAk03"
+                            disabled>
+                            Proceed to Payment
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -136,19 +136,19 @@
                                 <li class="mb-2">✓ Resume Review & Career Plan</li>
                                 <li class="mb-2">✓ Mock Interview Prep</li>
                             </ul>
-                            <label>
-                                <input type="checkbox" class="agree-terms">
-                                    <span class="small">I agree to the 
-                                    <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> 
-                                    and 
-                                    <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
-                                    </span>
+                            <label class="d-flex align-items-start gap-2 mb-3 text-start" style="cursor:pointer;">
+                            <input type="checkbox" class="agree-terms mt-1" style="flex-shrink:0;">
+                            <span class="small">I have read and agree to the 
+                                <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
+                                <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
+                            </span>
                             </label>
-
-                            <a href="https://buy.stripe.com/test_aFa9AU01mceK4T82d2dAk04"
-                            class="stripe-link btn btn-primary w-100 mt-auto disabled-link">
-                                Proceed to Payment
-                            </a>
+                            <button
+                            class="stripe-btn btn btn-primary w-100 mt-auto"
+                            data-href="https://buy.stripe.com/test_aFa9AU01mceK4T82d2dAk04"
+                            disabled>
+                            Proceed to Payment
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -299,26 +299,54 @@
             document.getElementById('cookie-banner').style.display = 'flex';
         }
 
-        /* ADD THIS PART */
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('.card-body').forEach(function (card) {
-                const checkbox = card.querySelector('.agree-terms');
-                const link = card.querySelector('.stripe-link');
-                if (!checkbox || !link) return;
+        function updatePurchaseLinks() {
+            document.querySelectorAll('.agree-terms').forEach(function (checkbox) {
+                const cardBody = checkbox.closest('.card-body');
+                if (!cardBody) return;
 
-                function updateState() {
-                    if (checkbox.checked) {
-                        link.classList.add('enabled-link');
-                        link.classList.remove('disabled-link');
-                    } else {
-                        link.classList.add('disabled-link');
-                        link.classList.remove('enabled-link');
-                    }
+                const purchaseLink = cardBody.querySelector('.stripe-link');
+                const purchaseButton = cardBody.querySelector('.stripe-btn');
+                const target = purchaseLink || purchaseButton;
+                if (!target) return;
+
+                const isActive = checkbox.checked;
+                target.classList.toggle('enabled-link', isActive);
+                target.classList.toggle('disabled-link', !isActive);
+                target.setAttribute('aria-disabled', String(!isActive));
+
+                if (purchaseLink && !purchaseLink.dataset.clickGuardInitialized) {
+                    purchaseLink.addEventListener('click', function (event) {
+                        if (!checkbox.checked) {
+                            event.preventDefault();
+                        }
+                    });
+                    purchaseLink.dataset.clickGuardInitialized = 'true';
                 }
 
-                checkbox.addEventListener('change', updateState);
-                updateState();
+                if (purchaseButton) {
+                    purchaseButton.disabled = !isActive;
+
+                    if (!purchaseButton.dataset.clickGuardInitialized) {
+                        purchaseButton.addEventListener('click', function (event) {
+                            if (!checkbox.checked) {
+                                event.preventDefault();
+                                return;
+                            }
+
+                            const href = purchaseButton.getAttribute('data-href');
+                            if (href) {
+                                window.location.href = href;
+                            }
+                        });
+                        purchaseButton.dataset.clickGuardInitialized = 'true';
+                    }
+                }
             });
+        }
+
+        updatePurchaseLinks();
+        document.querySelectorAll('.agree-terms').forEach(function (checkbox) {
+            checkbox.addEventListener('change', updatePurchaseLinks);
         });
     </script>
 
