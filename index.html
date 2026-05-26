@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/png" href="img/favicon.png">
-    <link rel="canonical" href="https://voyagercyber.com/index.html">
+    <link rel="canonical" href="https://voyagercyber.com/">
     <link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
     <link rel="shortcut icon" href="/img/favicon.ico" />
@@ -44,7 +44,7 @@
     </nav>
 
     <!-- Hero -->
-    <header id="hero" class="py-5 text-center text-white" style="min-height: 85vh; display: flex; align-items: center;">
+    <header id="hero" class="py-5 text-center text-white hero-full" style="min-height: 85vh; display: flex; align-items: center;">
         <div class="container py-5">
             <span class="badge bg-warning text-dark fw-semibold px-3 py-2 mb-4 rounded-pill" style="font-size: 0.85rem;">⚡ Pilot Cohort: Limited Seats at Founding Price</span>
             <h1 class="display-2 fw-bold mb-4">Break Into Cybersecurity.<br>Pass Security+ in 5 Weeks.</h1>
@@ -391,6 +391,83 @@
     }
     if (!localStorage.getItem('cookiesAccepted')) {
         document.getElementById('cookie-banner').style.display = 'flex';
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "CompTIA Security+ SY0-701 Bootcamp",
+    "description": "35-hour live instructor-led Security+ bootcamp covering all five exam domains. Designed for beginners and career changers. Taught by a former NSA instructor and Army Cyber Warfare Officer.",
+    "url": "https://voyagercyber.com/courses.html",
+    "provider": {
+        "@type": "Organization",
+        "@id": "https://voyagercyber.com/#organization",
+        "name": "Voyager Cyber Academy",
+        "url": "https://voyagercyber.com"
+    },
+    "instructor": {
+        "@type": "Person",
+        "name": "Alex Blalock",
+        "jobTitle": "Lead Instructor",
+        "description": "Former NSA instructor and U.S. Army Cyber Warfare Officer with 7 years of operational cybersecurity experience. Holds CISSP, GCIH, CEH, Security+, and Network+ certifications.",
+        "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "National Cryptologic University"
+        }
+    },
+    "educationalCredentialAwarded": "Preparation for CompTIA Security+ SY0-701",
+    "teaches": [
+        "General Security Concepts",
+        "Threats, Vulnerabilities and Mitigations",
+        "Security Architecture",
+        "Security Operations",
+        "Security Program Management and Oversight"
+    ],
+    "courseMode": "online",
+    "deliveryMode": "synchronous",
+    "duration": "P5W",
+    "totalTime": "PT35H",
+    "numberOfCredits": 0,
+    "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseSchedule": {
+        "@type": "Schedule",
+        "byDay": ["Wednesday", "Saturday"],
+        "startTime": "19:00",
+        "endTime": "23:00",
+        "startDate": "2026-07-29",
+        "endDate": "2026-08-29"
+        },
+        "offers": [
+        {
+            "@type": "Offer",
+            "name": "Starter",
+            "price": "549",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/LimitedAvailability",
+            "validFrom": "2026-01-01"
+        },
+        {
+            "@type": "Offer",
+            "name": "Professional",
+            "price": "998",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/LimitedAvailability",
+            "validFrom": "2026-01-01"
+        },
+        {
+            "@type": "Offer",
+            "name": "Career Accelerator",
+            "price": "1398",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/LimitedAvailability",
+            "validFrom": "2026-01-01"
+        }
+        ]
+    }
     }
     </script>
     

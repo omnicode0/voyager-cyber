@@ -18,6 +18,9 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
     <link rel="manifest" href="/img/site.webmanifest" />
 </head>
+
+
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -233,6 +236,83 @@
     }
     if (!localStorage.getItem('cookiesAccepted')) {
         document.getElementById('cookie-banner').style.display = 'flex';
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "CompTIA Security+ SY0-701 Bootcamp",
+    "description": "35-hour live instructor-led Security+ bootcamp covering all five exam domains. Designed for beginners and career changers. Taught by a former NSA instructor and Army Cyber Warfare Officer.",
+    "url": "https://voyagercyber.com/courses.html",
+    "provider": {
+        "@type": "Organization",
+        "@id": "https://voyagercyber.com/#organization",
+        "name": "Voyager Cyber Academy",
+        "url": "https://voyagercyber.com"
+    },
+    "instructor": {
+        "@type": "Person",
+        "name": "Alex Blalock",
+        "jobTitle": "Lead Instructor",
+        "description": "Former NSA instructor and U.S. Army Cyber Warfare Officer with 7 years of operational cybersecurity experience. Holds CISSP, GCIH, CEH, Security+, and Network+ certifications.",
+        "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "National Cryptologic University"
+        }
+    },
+    "educationalCredentialAwarded": "Preparation for CompTIA Security+ SY0-701",
+    "teaches": [
+        "General Security Concepts",
+        "Threats, Vulnerabilities and Mitigations",
+        "Security Architecture",
+        "Security Operations",
+        "Security Program Management and Oversight"
+    ],
+    "courseMode": "online",
+    "deliveryMode": "synchronous",
+    "duration": "P5W",
+    "totalTime": "PT35H",
+    "numberOfCredits": 0,
+    "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseSchedule": {
+        "@type": "Schedule",
+        "byDay": ["Wednesday", "Saturday"],
+        "startTime": "19:00",
+        "endTime": "23:00",
+        "startDate": "2026-07-29",
+        "endDate": "2026-08-29"
+        },
+        "offers": [
+        {
+            "@type": "Offer",
+            "name": "Starter",
+            "price": "549",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/LimitedAvailability",
+            "validFrom": "2026-01-01"
+        },
+        {
+            "@type": "Offer",
+            "name": "Professional",
+            "price": "998",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/LimitedAvailability",
+            "validFrom": "2026-01-01"
+        },
+        {
+            "@type": "Offer",
+            "name": "Career Accelerator",
+            "price": "1398",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/LimitedAvailability",
+            "validFrom": "2026-01-01"
+        }
+        ]
+    }
     }
     </script>
 
