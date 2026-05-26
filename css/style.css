@@ -3,9 +3,16 @@
  */
 
 :root {
+    /* Brand colors */
     --primary: #6f94aa;
     --primary-dark: #5a7d91;
-    /* Override Bootstrap 5 CSS custom properties: */
+    --dark: #232323;
+    --light: #f4f7f9;
+    --white: #ffffff;
+    --text-muted: #767676;
+    --font-main: 'Golos Text', sans-serif;
+
+    /* Bootstrap 5 overrides */
     --bs-primary: #6f94aa;
     --bs-primary-rgb: 111, 148, 170;
     --bs-primary-border-subtle: #b8cdd8;
@@ -13,7 +20,6 @@
     --bs-link-color: #6f94aa;
     --bs-link-color-rgb: 111, 148, 170;
     --bs-link-hover-color: #5a7d91;
-    /* rest of your variables */
 }
 
 body {
@@ -32,7 +38,17 @@ html {
 
 
 /* --- Typography --- */
-h1, .display-1 { font-size: 4.5rem; font-weight: 800; line-height: 1.1; }
+    /* REPLACED with a hero-scoped rule: */
+#hero h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+    /* Inner page hero — smaller: */
+header#hero:not(.hero-full) h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+}
 h2, .display-2 { font-size: 3rem; font-weight: 700; line-height: 1.2; }
 .display-5 { font-size: 1.5rem; font-weight: 600; }
 .display-7 { font-size: 1.1rem; }
