@@ -320,15 +320,6 @@
                 target.classList.toggle('disabled-link', !isActive);
                 target.setAttribute('aria-disabled', String(!isActive));
 
-                if (purchaseLink && !purchaseLink.dataset.clickGuardInitialized) {
-                    purchaseLink.addEventListener('click', function (event) {
-                        if (!checkbox.checked) {
-                            event.preventDefault();
-                        }
-                    });
-                    purchaseLink.dataset.clickGuardInitialized = 'true';
-                }
-
                 if (purchaseButton) {
                     purchaseButton.disabled = !isActive;
 
