@@ -132,6 +132,50 @@ h2, .display-2 { font-size: 3rem; font-weight: 700; line-height: 1.2; }
     box-shadow: none !important;
 }
 
+/* --- fix mobile horizontal scroll --- */
+
+html, body {
+    overflow-x: hidden;
+}
+
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* --- increase CTA button width --- */
+
+@media (max-width: 768px) {
+    .btn {
+        width: 100%;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .d-flex.flex-wrap.gap-3 a.btn {
+        width: 100%;
+    }
+
+        .stripe-btn {
+        min-height: 52px;
+        font-size: 1rem;
+    }
+}
+
+/* --- hamburger menu --- */
+
+
+.navbar-collapse {
+    padding: 1rem 0;
+}
+
 /* --- Pricing Cards --- */
 #pricing .card {
     border: none;
@@ -139,6 +183,10 @@ h2, .display-2 { font-size: 3rem; font-weight: 700; line-height: 1.2; }
     padding: 2rem;
     background: var(--white);
     transition: all 0.3s ease;
+}
+
+#pricing .border-primary {
+    transform: scale(1.03);
 }
 
 .card-price {
@@ -224,6 +272,11 @@ footer .text-muted {
     accent-color: var(--bs-primary, var(--primary));
     cursor: pointer;
     vertical-align: middle;
+    transform: scale(1.2);
+}
+
+.agree-terms + span {
+    line-height: 1.4;
 }
 
 label.d-flex .agree-terms {
