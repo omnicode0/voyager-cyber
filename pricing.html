@@ -65,6 +65,10 @@
                 </p>
 
             </div>
+            <div class="countdown-container">
+                <div class="countdown-label">Enrollment closes in</div>
+                <div id="countdown" class="countdown"></div>
+            </div>
             <div class="row g-4 justify-content-center align-items-stretch">
                 
                 <div class="col-lg-4 order-2 order-lg-1">
@@ -78,8 +82,8 @@
                                 <li class="mb-2">✓ 5 Weeks Live Instruction</li>
                                 <li class="mb-2">✓ Digital Course Materials</li>
                                 <li class="mb-2">✓ Practice Exam Access</li>
-                                <li class="mb-2 text-muted">✕ Exam Voucher Not Included</li>
                             </ul>
+
                             <label class="d-flex align-items-start gap-2 mb-3 text-start" style="cursor:pointer;">
                             <input type="checkbox" class="agree-terms mt-1" style="flex-shrink:0;">
                             <span class="small">I have read and agree to the 
@@ -94,6 +98,8 @@
                             Reserve My Seat
                             </button>
                         </div>
+                        <p class="small text-muted mb-0">*Exam voucher available in Professional tier</p>
+
                     </div>
                 </div>
 
@@ -339,6 +345,38 @@
                     }
                 }
             });
+            function updateCountdown() {
+            const target = new Date("2026-07-21T23:59:59-04:00").getTime();
+            const now = new Date().getTime();
+
+            const distance = target - now;
+
+            if (distance <= 0) {
+                document.getElementById("countdown").textContent =
+                "Enrollment Closed";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(
+                (distance % (1000 * 60 * 60 * 24)) /
+                (1000 * 60 * 60)
+            );
+            const minutes = Math.floor(
+                (distance % (1000 * 60 * 60)) /
+                (1000 * 60)
+            );
+            const seconds = Math.floor(
+                (distance % (1000 * 60)) /
+                1000
+            );
+
+            document.getElementById("countdown").textContent =
+                `${days} Days and ${hours}h${minutes}m${seconds}s`;
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         }
 
         updatePurchaseLinks();

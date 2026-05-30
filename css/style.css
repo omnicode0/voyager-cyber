@@ -169,6 +169,26 @@ video, iframe {
     }
 }
 
+/* --- countdown timer --- */
+
+
+.countdown-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.countdown-label {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.countdown {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #dc2626;
+}
+
 /* --- hamburger menu --- */
 
 
