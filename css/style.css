@@ -169,6 +169,94 @@ video, iframe {
     }
 }
 
+/* --- index page comparison table --- */
+    /* Comparison Table */
+    .comparison-table {
+        font-size: 0.92rem;
+        border: 1px solid #d8dee4;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+    }
+    .comparison-table td.voyager {
+    background: rgba(22, 163, 74, 0.04);
+    border-left: 2px solid rgba(22, 163, 74, 0.25);
+    }
+
+    .comparison-table td.selfpaced {
+    color: rgba(107, 114, 128, 0.7);
+    background: rgba(107, 114, 128, 0.02);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.75rem 1rem;
+        border: 1px solid #e5e7eb;
+        vertical-align: middle;
+    }
+
+    /* Header */
+    .comparison-table thead th {
+        background: #f8fafc;
+        font-weight: 700;
+        border-bottom: 2px solid #cbd5e1;
+    }
+
+    /* Voyager Cyber header */
+    .comparison-table .voyager-header {
+        background: #eaf8ef;
+        color: #111827;
+    }
+
+    /* Self-paced header */
+    .comparison-table .selfpaced-header {
+        background: #fdf2f2;
+        color: #991b1b;
+    }
+
+    /* Alternate row shading */
+    .comparison-table tbody tr:nth-child(even) {
+        background: #f9fafb;
+    }
+
+    /* Voyager column */
+    .comparison-table td.voyager {
+        color: #111827;
+        font-weight: 500;
+    }
+
+    /* Self-paced column */
+    .comparison-table td.selfpaced {
+        color: rgba(107, 114, 128, 0.8);
+    }
+
+    /* Checkmarks */
+    .comparison-table .check {
+        color: #16a34a;
+        font-weight: 700;
+        margin-right: 0.25rem;
+    }
+
+    /* X marks */
+    .comparison-table .cross {
+        color: #dc2626;
+        opacity: 0.75;
+        margin-right: 0.25rem;
+    }
+
+    /* Feature column */
+    .comparison-table td:first-child {
+        font-weight: 600;
+        color: #374151;
+        white-space: nowrap;
+    }
+
+    /* Hover effect */
+    .comparison-table tbody tr:hover {
+        background: #f3f4f6;
+    }
+
+
 /* --- countdown timer --- */
 
 
