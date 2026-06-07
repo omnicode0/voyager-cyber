@@ -17,6 +17,37 @@
     <link rel="shortcut icon" href="/img/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
     <link rel="manifest" href="/img/site.webmanifest" />
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": "CompTIA Security+ Live Bootcamp",
+        "description": "Pass the CompTIA Security+ exam in 5 weeks with live, instructor-led training tailored for working professionals. No PTO required.",
+        "provider": {
+            "@type": "EducationalOrganization",
+            "name": "Voyager Cyber Academy",
+            "sameAs": "https://voyagercyber.com"
+        },
+        "hasCourseInstance": {
+            "@type": "CourseInstance",
+            "courseMode": "Online",
+            "courseWorkload": "PT35H",
+            "startDate": "2026-07-29",
+            "location": {
+            "@type": "VirtualLocation",
+            "url": "https://voyagercyber.com/pricing.html"
+            }
+        },
+        "offers": {
+            "@type": "AggregateOffer",
+            "priceCurrency": "USD",
+            "lowPrice": "1099.00",
+            "highPrice": "2198.00",
+            "offerCount": "4",
+            "url": "https://voyagercyber.com/pricing.html"
+        }
+        }
+    </script>
 </head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W0LNRL78V9"></script>
 <script>
@@ -67,8 +98,8 @@
                 <h2 class="fw-bold">Reserve Your Security+ Training</h2>
             </div>
             <div class="countdown-container">
-                <div class="countdown-label">Enrollment closes July 21st, 2026 for the July 29th cohort, in</div>
-                <div id="countdown" class="countdown"></div>
+                <div id="countdown-label" class="countdown-label">Enrollment closes July 21st, 2026 for the July 29th cohort, in</div>
+                <div id="countdown" class="countdown" data-deadline="2026-07-21T23:59:59-04:00"></div>
             </div>
             <div class="row g-4 justify-content-center align-items-stretch">
                 
@@ -316,23 +347,31 @@
 <!-- Calendly badge widget end -->
  
     <script>
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
-
-        if (!localStorage.getItem('cookiesAccepted')) {
-            document.getElementById('cookie-banner').style.display = 'flex';
-        }
+        // Store interval ID in the global scope so it can be cleared
+        let countdownIntervalId;
 
         function updateCountdown() {
-            const target = new Date("2026-07-21T23:59:59-04:00").getTime();
+            const countdownEl = document.getElementById("countdown");
+            if (!countdownEl) return;
+
+            // Pull deadline from the data attribute on the HTML element
+            const deadlineString = countdownEl.getAttribute("data-deadline") || "2026-07-21T23:59:59-04:00";
+            const target = new Date(deadlineString).getTime();
             const now = new Date().getTime();
 
             const distance = target - now;
 
             if (distance <= 0) {
-                document.getElementById("countdown").textContent = "Enrollment Closed";
+                // Stop the timer from ticking in the background
+                if (countdownIntervalId) clearInterval(countdownIntervalId);
+                
+                // Show graceful fallback message
+                countdownEl.innerHTML = "<strong>Enrollment Closed</strong> — Join the waitlist below.";
+                
+                // Hide the label so it doesn't confusingly read "closes in: Enrollment Closed"
+                const labelEl = document.getElementById("countdown-label");
+                if (labelEl) labelEl.style.display = "none";
+                
                 return;
             }
 
@@ -341,11 +380,20 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById("countdown").textContent = `${days} Days and ${hours}h${minutes}m${seconds}s`;
+            // Pad single-digit hours, minutes, and seconds with a leading zero for a cleaner look
+            const pad = (num) => num.toString().padStart(2, '0');
+
+            countdownEl.textContent = `${days} Days, ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
         }
 
+        // Initialize timer immediately, then set interval and store its ID
         updateCountdown();
-        setInterval(updateCountdown, 1000);
+        countdownIntervalId = setInterval(updateCountdown, 1000);
+
+        // Cleanup interval on page unload to prevent memory leaks in Bootstrap/SPA environments
+        window.addEventListener('pagehide', () => {
+            if (countdownIntervalId) clearInterval(countdownIntervalId);
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
