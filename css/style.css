@@ -261,6 +261,66 @@ video, iframe {
         background: #f3f4f6;
     }
 
+/* --- Mobile comparison table --- */
+@media (max-width: 767.98px) {
+    .comparison-table thead {
+        display: none;
+    }
+    .comparison-table,
+    .comparison-table tbody,
+    .comparison-table tr,
+    .comparison-table td {
+        display: block;
+        width: 100% !important;
+    }
+    .comparison-table tr {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        background: #fff;
+    }
+    .comparison-table td {
+        padding: 0.6rem 1rem;
+        border: none;
+        border-bottom: 1px solid #f0f0f0;
+        white-space: normal !important;
+    }
+    .comparison-table td:last-child {
+        border-bottom: none;
+    }
+    .comparison-table td:first-child {
+        background: #f8fafc;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: var(--dark);
+    }
+    .comparison-table td.voyager {
+        background: rgba(22, 163, 74, 0.06);
+        border-left: none;
+    }
+    .comparison-table td.voyager::before {
+        content: '✓ Voyager Cyber';
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #16a34a;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.15rem;
+    }
+    .comparison-table td.selfpaced::before {
+        content: '✕ Self-Paced';
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #dc2626;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.15rem;
+    }
+}
+
 
 /* --- countdown timer --- */
 
