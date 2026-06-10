@@ -53,6 +53,11 @@ h2, .display-2 { font-size: 3rem; font-weight: 700; line-height: 1.2; }
 .display-5 { font-size: 1.5rem; font-weight: 600; }
 .display-7 { font-size: 1.1rem; }
 
+.footnote-text {
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
 /* --- Navigation --- */
 .navbar {
     padding: 1.2rem 0;
