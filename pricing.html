@@ -179,6 +179,7 @@
                 <div id="countdown-label" class="countdown-label">Enrollment closes July 21st, 2026 for the July 29th cohort, in</div>
                 <div id="countdown" class="countdown" data-deadline="2026-07-21T23:59:59-04:00"></div>
             </div>
+            <div id="seats-alert" class="alert text-center fw-bold mt-3" style="display:none;"></div>
             <p class="small text-muted text-center mb-4">
                 <strong>Note:</strong> This cohort covers the SY0-701 exam, scheduled to transition to SY0-801 on October 20, 2026.
                 <a href="courses.html">Learn more →</a>
@@ -202,7 +203,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/6oUeVdfaa7QOgK7dMbeIw0c">
+                            <a id="btn-starter" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/6oUeVdfaa7QOgK7dMbeIw0c">
                                 Reserve My Seat
                             </a>
                         </div>
@@ -226,7 +227,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/7sYeVd2noc7465tcI7eIw0b">
+                            <a id="btn-professional" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/7sYeVd2noc7465tcI7eIw0b">
                                 Reserve My Seat
                             </a>
                         </div>
@@ -249,7 +250,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/9B6eVdbXY2wufG39vVeIw0a">
+                            <a id="btn-career" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/9B6eVdbXY2wufG39vVeIw0a">
                                 Reserve My Seat
                             </a>
                         </div>
@@ -276,7 +277,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/cNieVd4vw4ECalJfUjeIw09">
+                            <a id="btn-workforce" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/cNieVd4vw4ECalJfUjeIw09">
                                 Enroll My Team
                             </a>
                         </div>
@@ -497,6 +498,50 @@
         window.addEventListener('pagehide', () => {
             if (countdownIntervalId) clearInterval(countdownIntervalId);
         });
+    </script>
+
+    <script>
+        fetch('https://voyager-cyber-api.alex-blalock.workers.dev/api/seats')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                var el = document.getElementById('seats-alert');
+                var btns = ['btn-starter', 'btn-professional', 'btn-career', 'btn-workforce'];
+
+                if (data.remaining <= 0) {
+                    el.textContent = 'Sold Out — Next Cohort TBA';
+                    el.className = 'alert alert-danger text-center fw-bold mt-3';
+                    el.style.display = 'block';
+                    btns.forEach(function(id) {
+                        var btn = document.getElementById(id);
+                        if (btn) {
+                            btn.href = '#';
+                            btn.classList.remove('btn-primary');
+                            btn.classList.add('btn-secondary');
+                            btn.style.pointerEvents = 'none';
+                        }
+                    });
+                } else {
+                    // Workforce requires minimum 3 seats — disable if fewer remain
+                    var wf = document.getElementById('btn-workforce');
+                    if (wf && data.remaining < 3) {
+                        wf.href = '#';
+                        wf.classList.remove('btn-primary');
+                        wf.classList.add('btn-secondary');
+                        wf.style.pointerEvents = 'none';
+                        var wfMsg = document.createElement('p');
+                        wfMsg.className = 'small text-muted mt-2 mb-0';
+                        wfMsg.textContent = 'Workforce requires 3+ seats. Only ' + data.remaining + ' remaining.';
+                        wf.parentNode.appendChild(wfMsg);
+                    }
+                }
+
+                if (data.remaining > 0 && data.remaining < 5) {
+                    el.textContent = 'Only ' + data.remaining + ' seat' + (data.remaining === 1 ? '' : 's') + ' remaining for the July 29th cohort.';
+                    el.className = 'alert text-center fw-bold mt-3';
+                    el.style.display = 'block';
+                }
+            })
+            .catch(function() {});
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
