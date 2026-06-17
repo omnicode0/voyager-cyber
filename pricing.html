@@ -181,7 +181,7 @@
             </div>
             <div id="seats-alert" class="alert text-center fw-bold mt-3" style="display:none;"></div>
             <p class="small text-muted text-center mb-4">
-                <strong>Note:</strong> This cohort covers the SY0-701 exam, scheduled to transition to SY0-801 on October 20, 2026.
+                <strong>Note:</strong> This cohort covers the SY0-701 exam. The cohort completes in early September 2026 — giving you a clear runway to certify before SY0-801 goes live on October 20.
                 <a href="courses.html">Learn more →</a>
             </p>
             <h2 class="fw-bold text-center mt-5 mb-4">For Individuals</h2>
@@ -265,21 +265,48 @@
                 <div class="col-lg-4 order-4 order-lg-4">
                     <div class="card h-100 shadow-sm border-0 p-4">
                         <div class="card-body d-flex flex-column text-center">
-                            <h3 class="h5 text-uppercase text-muted">Workforce</h3>
-                            <div class="card-price my-4">$1,099</div>
-                            <ul class="list-unstyled mb-5 text-start">
-                                <li class="mb-2">✓ Group pricing for 3+ students </li>
-                                <li class="mb-2">✓ Ideal for employers and organizations</li>
-                                <li class="mb-2">✓ Vouchers available for purchase separately</li>
+                            <h3 class="h5 text-uppercase text-muted">Workforce Training</h3>
+                            <div class="card-price my-4">$1,099 <span class="fs-6 fw-normal">/ employee</span></div>
+                            <p class="small text-muted mb-3">3+ employees</p>
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2">✓ 35 hours live training</li>
+                                <li class="mb-2">✓ Course materials and practice exams</li>
                             </ul>
-                            <p class="small text-muted text-start mb-3">
-                                By proceeding to checkout, you agree to the 
-                                <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
-                                <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
-                            </p>
-                            <a id="btn-workforce" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/cNieVd4vw4ECalJfUjeIw09">
-                                Enroll My Team
-                            </a>
+                            <div class="mt-auto pt-3">
+                                <p class="small text-muted text-start mb-2">
+                                    By proceeding to checkout, you agree to the 
+                                    <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
+                                    <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
+                                </p>
+                                <a id="btn-workforce" class="btn btn-primary w-100" href="https://book.stripe.com/cNieVd4vw4ECalJfUjeIw09">
+                                    Enroll My Team
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 order-5 order-lg-5">
+                    <div class="card h-100 shadow-sm border-0 p-4">
+                        <div class="card-body d-flex flex-column text-center">
+                            <h3 class="h5 text-uppercase text-muted">Workforce Certification</h3>
+                            <div class="card-price my-4">$1,599 <span class="fs-6 fw-normal">/ employee</span></div>
+                            <p class="small text-muted mb-3">3+ employees</p>
+                            <ul class="list-unstyled text-start">
+                                <li class="mb-2">✓ 35 hours live training</li>
+                                <li class="mb-2">✓ Course materials and practice exams</li>
+                                <li class="mb-2">✓ Security+ exam voucher with test retake support</li>
+                            </ul>
+                            <div class="mt-auto pt-3">
+                                <p class="small text-muted text-start mb-2">
+                                    By proceeding to checkout, you agree to the 
+                                    <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
+                                    <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
+                                </p>
+                                <a id="btn-workforce-cert" class="btn btn-primary w-100" href="https://book.stripe.com/8x23cv8LM7QO65teQfeIw0d">
+                                    Enroll My Team
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -288,7 +315,11 @@
         </div>
     </section>
 
-    
+    <div class="text-center mt-0 mb-4">
+        <a href="downloads/program-overview.pdf" download class="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold">
+            Download Full Program Overview (PDF)
+        </a>
+    </div>
 
     <section class="py-4 bg-light text-center">
         <div class="container" style="max-width: 600px;">
@@ -505,7 +536,7 @@
             .then(function(res) { return res.json(); })
             .then(function(data) {
                 var el = document.getElementById('seats-alert');
-                var btns = ['btn-starter', 'btn-professional', 'btn-career', 'btn-workforce'];
+                var btns = ['btn-starter', 'btn-professional', 'btn-career', 'btn-workforce', 'btn-workforce-cert'];
 
                 if (data.remaining <= 0) {
                     el.textContent = 'Sold Out — Next Cohort TBA';
@@ -521,17 +552,22 @@
                         }
                     });
                 } else {
-                    // Workforce requires minimum 3 seats — disable if fewer remain
-                    var wf = document.getElementById('btn-workforce');
-                    if (wf && data.remaining < 3) {
-                        wf.href = '#';
-                        wf.classList.remove('btn-primary');
-                        wf.classList.add('btn-secondary');
-                        wf.style.pointerEvents = 'none';
-                        var wfMsg = document.createElement('p');
-                        wfMsg.className = 'small text-muted mt-2 mb-0';
-                        wfMsg.textContent = 'Workforce requires 3+ seats. Only ' + data.remaining + ' remaining.';
-                        wf.parentNode.appendChild(wfMsg);
+                    // Workforce requires minimum 3 seats — disable both buttons if fewer remain
+                    var wfBtns = ['btn-workforce', 'btn-workforce-cert'];
+                    if (data.remaining < 3) {
+                        wfBtns.forEach(function(id) {
+                            var btn = document.getElementById(id);
+                            if (btn) {
+                                btn.href = '#';
+                                btn.classList.remove('btn-primary');
+                                btn.classList.add('btn-secondary');
+                                btn.style.pointerEvents = 'none';
+                                var wfMsg = document.createElement('p');
+                                wfMsg.className = 'small text-muted mt-2 mb-0';
+                                wfMsg.textContent = 'Workforce requires 3+ seats. Only ' + data.remaining + ' remaining.';
+                                btn.parentNode.appendChild(wfMsg);
+                            }
+                        });
                     }
                 }
 
