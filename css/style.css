@@ -29,6 +29,11 @@ body {
     overflow-x: hidden;
 }
 
+#book-training {
+    scroll-margin-top: 0;
+}
+
+
 /* --- Scrolling Behavior --- */
 html {
   scroll-behavior: smooth;
@@ -327,7 +332,7 @@ video, iframe {
 
 .countdown-container {
   text-align: center;
-  margin: 2rem 0;
+  margin: 2rem 0 0.5rem;
 }
 
 .countdown-label {
