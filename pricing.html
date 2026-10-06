@@ -142,8 +142,8 @@
         </div>
     </nav>
 
-    <header id="hero" class="py-5 text-center text-white" style="min-height: 60vh;">
-        <div class="container py-5">
+    <header id="hero" class="py-4 text-center text-white">
+        <div class="container py-4">
             <div>
             <h1 class="display-3 fw-bold mb-3">Live Security+ Test Prep in 5 Weeks</h1>
             <p class="lead mb-4">Evening + weekend schedule built for full-time professionals.<br><strong>No time off work required.</strong></p>
@@ -153,27 +153,18 @@
 
     <section id="enroll" class="py-5">
         <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold">Reserve Your Security+ Training</h2>
-            </div>
-            <div id="book-training" class="card border-success shadow-sm mb-5">
-                <div class="card-body text-center">
-                    <h3 class="h5 text-success mb-2">
-                        ✓ Flexible Enrollment Protection
-                    </h3>
-                    <p class="mb-0">
-                        If your plans change, you may cancel for a full refund up to
-                        14 days before the cohort start date. See our
-                        <a href="refund.html">Refund Policy</a> for complete details.
-                    </p>
+            <div id="book-training" class="cohort-list mx-auto mb-4">
+                <h2 class="fw-bold text-center mb-3">Upcoming Cohorts</h2>
+                <!-- Rendered from cohorts.json — edit that file to add or remove dates -->
+                <div id="cohort-rows">
+                    <p class="text-center text-muted mb-0">Loading upcoming cohort dates…</p>
                 </div>
+                <p class="small text-success text-center mt-2 mb-0">
+                    ✓ <strong>Flexible Enrollment Protection:</strong> full refund if you cancel 14+ days before your cohort starts.
+                    <a href="refund.html">Refund Policy</a>
+                </p>
             </div>
-            <div class="countdown-container">
-                <div id="countdown-label" class="countdown-label">Enrollment closes July 21st, 2026 for the July 29th cohort, in</div>
-                <div id="countdown" class="countdown" data-deadline="2026-07-21T23:59:59-04:00"></div>
-            </div>
-            <div id="seats-alert" class="alert text-center fw-bold mt-1 mb-3" style="display:none;"></div>
-            <h2 class="fw-bold text-center mt-3 mb-4">For Individuals</h2>
+            <h2 class="fw-bold text-center mt-4 mb-4">For Individuals</h2>
             <div class="row g-4 justify-content-center align-items-stretch">
                 
                 <div class="col-lg-4 order-2 order-lg-1">
@@ -192,7 +183,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a id="btn-starter" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/6oUeVdfaa7QOgK7dMbeIw0c">
+                            <a id="btn-starter" data-cohort-checkout class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/6oUeVdfaa7QOgK7dMbeIw0c">
                                 Reserve My Seat
                             </a>
                         </div>
@@ -216,7 +207,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a id="btn-professional" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/7sYeVd2noc7465tcI7eIw0b">
+                            <a id="btn-professional" data-cohort-checkout class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/7sYeVd2noc7465tcI7eIw0b">
                                 Reserve My Seat
                             </a>
                         </div>
@@ -239,7 +230,7 @@
                                 <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                 <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                             </p>
-                            <a id="btn-career" class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/9B6eVdbXY2wufG39vVeIw0a">
+                            <a id="btn-career" data-cohort-checkout class="btn btn-primary w-100 mt-auto" href="https://buy.stripe.com/9B6eVdbXY2wufG39vVeIw0a">
                                 Reserve My Seat
                             </a>
                         </div>
@@ -267,7 +258,7 @@
                                     <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                     <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                                 </p>
-                                <a id="btn-workforce" class="btn btn-primary w-100" href="https://book.stripe.com/cNieVd4vw4ECalJfUjeIw09">
+                                <a id="btn-workforce" data-cohort-checkout data-min-seats="3" class="btn btn-primary w-100" href="https://book.stripe.com/cNieVd4vw4ECalJfUjeIw09">
                                     Enroll My Team
                                 </a>
                             </div>
@@ -292,7 +283,7 @@
                                     <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                     <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                                 </p>
-                                <a id="btn-workforce-cert" class="btn btn-primary w-100" href="https://book.stripe.com/8x23cv8LM7QO65teQfeIw0d">
+                                <a id="btn-workforce-cert" data-cohort-checkout data-min-seats="3" class="btn btn-primary w-100" href="https://book.stripe.com/8x23cv8LM7QO65teQfeIw0d">
                                     Enroll My Team
                                 </a>
                             </div>
@@ -340,7 +331,7 @@
         </a>
     </div>
 
-    <section class="py-4 bg-light text-center">
+    <section id="waitlist" class="py-4 bg-light text-center">
         <div class="container" style="max-width: 600px;">
             <h3 class="h5 fw-bold mb-2">Want the free Security+ Study Roadmap?</h3>
             <p class="small text-muted mb-3">Get it delivered instantly — plus updates on upcoming cohorts.</p>
@@ -443,12 +434,12 @@
                     <div class="mb-4 text-center">
                         <p class="mb-2 h5"><strong>Wednesdays:</strong> 7:00 PM – 11:00 PM Eastern <span class="text-muted small">/ 6–10 PM Central</span></p>
                         <p class="mb-2 h5"><strong>Saturdays:</strong> 9:00 AM – 12:00 PM Eastern <span class="text-muted small">/ 8–11 AM Central</span></p>
-                        <p class="mb-0 h5"><strong>Start Date:</strong> 29 July 2026</p>
+                        <p class="mb-0 h5"><strong>Upcoming Start Dates:</strong> <span id="schedule-start-dates">See cohorts above</span></p>
                     </div>
                     <p class="text-center text-muted mb-4"><em>Total: 5 weeks (35 total live instruction hours). No PTO or job leave required.</em></p>
                     <div class="ratio" style="--bs-aspect-ratio: 75%;">
                         <iframe
-                            src="https://calendar.google.com/calendar/embed?src=c_13582f297a3900335021ed2d6fcfd6d8ed22e85669a7804cb62b15b3b3ec1ada%40group.calendar.google.com&ctz=America/New_York&dates=20260801/20260831"
+                            src="https://calendar.google.com/calendar/embed?src=c_13582f297a3900335021ed2d6fcfd6d8ed22e85669a7804cb62b15b3b3ec1ada%40group.calendar.google.com&ctz=America/New_York"
                             style="border: 0;"
                             loading="lazy"
                             title="Voyager Cyber Academy Session Schedule">
@@ -498,106 +489,321 @@
 <script type="text/javascript">window.onload = function() { Calendly.initBadgeWidget({ url: 'https://calendly.com/voyagercyber-info/30min', text: 'Schedule 15-minute Admissions Chat with Alex', color: '#0069ff', textColor: '#ffffff', branding: true }); }</script>
 <!-- Calendly badge widget end -->
  
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Cohort chooser: the step between "Reserve My Seat" and Stripe checkout -->
+    <div class="modal fade" id="cohort-modal" tabindex="-1" aria-labelledby="cohort-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5 fw-bold" id="cohort-modal-title">Choose Your Cohort</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="cohort-modal-tier" class="small text-muted mb-3"></p>
+                    <div id="cohort-options" role="radiogroup" aria-labelledby="cohort-modal-title"></div>
+                </div>
+                <div class="modal-footer flex-column align-items-stretch">
+                    <p class="small text-muted mb-2">
+                        By proceeding to checkout, you agree to the
+                        <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and
+                        <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
+                    </p>
+                    <a id="cohort-continue" class="btn btn-primary w-100" href="#">Continue to Secure Checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Store interval ID in the global scope so it can be cleared
-        let countdownIntervalId;
+    (function () {
+        // Cohort dates live in cohorts.json — edit that file to add/remove cohorts (see COHORTS.md).
+        var COHORTS_URL = 'cohorts.json';
+        var DEFAULT_SCHEDULE = 'Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET';
+        var LOW_SEATS = 5;
 
-        function updateCountdown() {
-            const countdownEl = document.getElementById("countdown");
-            if (!countdownEl) return;
+        var state = 'loading'; // loading | ready | error
+        var cohorts = [];      // open cohorts, soonest start first
+        var activeBtn = null;
+        var modal = null;
 
-            // Pull deadline from the data attribute on the HTML element
-            const deadlineString = countdownEl.getAttribute("data-deadline") || "2026-07-21T23:59:59-04:00";
-            const target = new Date(deadlineString).getTime();
-            const now = new Date().getTime();
+        var rowsEl = document.getElementById('cohort-rows');
+        var optionsEl = document.getElementById('cohort-options');
+        var continueEl = document.getElementById('cohort-continue');
+        var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-cohort-checkout]'));
+        buttons.forEach(function (btn) { btn.setAttribute('data-checkout', btn.href); });
 
-            const distance = target - now;
+        function el(tag, cls, text) {
+            var node = document.createElement(tag);
+            if (cls) node.className = cls;
+            if (text != null) node.textContent = text;
+            return node;
+        }
 
-            if (distance <= 0) {
-                // Stop the timer from ticking in the background
-                if (countdownIntervalId) clearInterval(countdownIntervalId);
-                
-                // Show graceful fallback message
-                countdownEl.innerHTML = "<strong>Enrollment Closed</strong> — Join the waitlist below.";
-                
-                // Hide the label so it doesn't confusingly read "closes in: Enrollment Closed"
-                const labelEl = document.getElementById("countdown-label");
-                if (labelEl) labelEl.style.display = "none";
-                
+        // "2026-11-04" -> local midnight (avoids the UTC off-by-one of new Date("2026-11-04"))
+        function parseDay(str) {
+            var p = String(str).split('-');
+            return new Date(+p[0], +p[1] - 1, +p[2]);
+        }
+
+        // Date-only deadlines run through the end of that day
+        function parseDeadline(str) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+                var d = parseDay(str);
+                d.setHours(23, 59, 59);
+                return d;
+            }
+            return new Date(str);
+        }
+
+        function fmt(d, withYear) {
+            var opts = { month: 'short', day: 'numeric' };
+            if (withYear) opts.year = 'numeric';
+            return d.toLocaleDateString('en-US', opts);
+        }
+
+        // Deadlines are exact moments, so show them in Eastern time like the class schedule
+        function fmtDeadline(c) {
+            if (c.enrollByDateOnly) return fmt(c.enrollByDate);
+            return c.enrollByDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
+        }
+
+        function dateRange(c) {
+            var sameYear = c.startDate.getFullYear() === c.endDate.getFullYear();
+            return fmt(c.startDate, !sameYear) + ' – ' + fmt(c.endDate, true);
+        }
+
+        function timeLeft(c) {
+            var ms = c.enrollByDate - Date.now();
+            var hours = Math.floor(ms / 3600000);
+            if (hours < 48) return hours <= 1 ? 'closing now' : hours + ' hours left';
+            return Math.floor(hours / 24) + ' days left';
+        }
+
+        function isSoldOut(c) {
+            return c.soldOut === true || (c.remaining != null && c.remaining <= 0);
+        }
+
+        function seatsText(c) {
+            if (isSoldOut(c)) return 'Sold out';
+            if (c.remaining != null && c.remaining < LOW_SEATS) {
+                return 'Only ' + c.remaining + ' seat' + (c.remaining === 1 ? '' : 's') + ' left';
+            }
+            return '';
+        }
+
+        function tierKey(btn) { return btn.id.replace(/^btn-/, ''); }
+
+        function tierName(btn) {
+            var h = btn.closest('.card-body').querySelector('h3');
+            return h ? h.textContent.trim() : '';
+        }
+
+        function checkoutUrl(btn, c) {
+            var base = (c.checkout && c.checkout[tierKey(btn)]) || btn.getAttribute('data-checkout');
+            var url = new URL(base);
+            // Stripe Payment Links record this on the payment so you can see which cohort was bought
+            url.searchParams.set('client_reference_id', 'cohort_' + String(c.id).replace(/[^A-Za-z0-9_-]/g, '-'));
+            return url.toString();
+        }
+
+        function unavailableReason(btn, c) {
+            if (isSoldOut(c)) return 'Sold out';
+            var min = +btn.getAttribute('data-min-seats') || 1;
+            if (c.remaining != null && c.remaining < min) {
+                return 'Requires ' + min + '+ seats — only ' + c.remaining + ' left';
+            }
+            return '';
+        }
+
+        function renderRows() {
+            rowsEl.innerHTML = '';
+            if (state === 'error') {
+                var err = el('p', 'text-center text-muted mb-0', 'Cohort dates couldn’t load. Email ');
+                var mail = el('a', '', 'info@voyagercyber.com');
+                mail.href = 'mailto:info@voyagercyber.com';
+                err.appendChild(mail);
+                err.appendChild(document.createTextNode(' and we’ll get you scheduled.'));
+                rowsEl.appendChild(err);
+                return;
+            }
+            if (!cohorts.length) {
+                var none = el('p', 'text-center mb-0', 'New cohort dates are coming soon. ');
+                var wl = el('a', 'fw-bold', 'Join the waitlist');
+                wl.href = '#waitlist';
+                none.appendChild(wl);
+                none.appendChild(document.createTextNode(' to hear first.'));
+                rowsEl.appendChild(none);
+                return;
+            }
+            cohorts.forEach(function (c) {
+                var soldOut = isSoldOut(c);
+                var row = el('div', 'cohort-row' + (soldOut ? ' is-sold-out' : ''));
+                var left = el('div');
+                left.appendChild(el('div', 'fw-bold', (c.label ? c.label + ': ' : '') + dateRange(c)));
+                left.appendChild(el('div', 'small text-muted', c.schedule || DEFAULT_SCHEDULE));
+                var right = el('div', 'cohort-row-status small');
+                if (!soldOut) {
+                    var line = el('div', '', 'Enroll by ' + fmtDeadline(c) + ' · ');
+                    line.appendChild(el('span', 'fw-bold text-danger', timeLeft(c)));
+                    right.appendChild(line);
+                }
+                var seats = seatsText(c);
+                if (seats) right.appendChild(el('span', 'badge ' + (soldOut ? 'bg-secondary' : 'bg-danger'), seats));
+                row.appendChild(left);
+                row.appendChild(right);
+                rowsEl.appendChild(row);
+            });
+        }
+
+        function renderScheduleDates() {
+            var span = document.getElementById('schedule-start-dates');
+            if (!span || state !== 'ready') return;
+            span.textContent = cohorts.length
+                ? cohorts.map(function (c) { return fmt(c.startDate, true); }).join(' · ')
+                : 'New dates coming soon';
+        }
+
+        function renderButtons() {
+            if (state !== 'ready' || cohorts.length) return;
+            // Nothing open: send people to the waitlist instead of checkout
+            buttons.forEach(function (btn) {
+                btn.textContent = 'Join the Waitlist';
+                btn.href = '#waitlist';
+                btn.removeAttribute('data-cohort-checkout');
+            });
+        }
+
+        function setContinue(href) {
+            if (href) {
+                continueEl.href = href;
+                continueEl.classList.remove('disabled');
+                continueEl.removeAttribute('aria-disabled');
+            } else {
+                continueEl.href = '#';
+                continueEl.classList.add('disabled');
+                continueEl.setAttribute('aria-disabled', 'true');
+            }
+        }
+
+        function renderOptions() {
+            if (!activeBtn) return;
+            var btn = activeBtn;
+            document.getElementById('cohort-modal-tier').textContent = tierName(btn) + ' — select the cohort you’re reserving a seat in.';
+            optionsEl.innerHTML = '';
+            setContinue(null);
+
+            if (state === 'loading') {
+                optionsEl.appendChild(el('p', 'text-muted mb-0', 'Loading cohort dates…'));
+                return;
+            }
+            if (state === 'error') {
+                optionsEl.appendChild(el('p', 'mb-0', 'We couldn’t load cohort dates. You can still check out — we’ll confirm your start date by email.'));
+                setContinue(btn.getAttribute('data-checkout'));
                 return;
             }
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Pad single-digit hours, minutes, and seconds with a leading zero for a cleaner look
-            const pad = (num) => num.toString().padStart(2, '0');
-
-            countdownEl.textContent = `${days} Days, ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+            var selected = false;
+            cohorts.forEach(function (c, i) {
+                var reason = unavailableReason(btn, c);
+                var id = 'cohort-opt-' + i;
+                var wrap = el('label', 'cohort-option' + (reason ? ' is-disabled' : ''));
+                wrap.setAttribute('for', id);
+                var input = el('input', 'form-check-input mt-1');
+                input.type = 'radio';
+                input.name = 'cohort-choice';
+                input.id = id;
+                input.disabled = !!reason;
+                if (!reason && !selected) { input.checked = true; selected = true; setContinue(checkoutUrl(btn, c)); }
+                input.addEventListener('change', function () { setContinue(checkoutUrl(btn, c)); });
+                var text = el('span', 'flex-grow-1');
+                text.appendChild(el('span', 'd-block fw-bold', (c.label ? c.label + ': ' : '') + dateRange(c)));
+                text.appendChild(el('span', 'd-block small text-muted', c.schedule || DEFAULT_SCHEDULE));
+                var note = reason || seatsText(c) || ('Enroll by ' + fmtDeadline(c));
+                text.appendChild(el('span', 'd-block small ' + (reason ? 'text-muted' : 'text-danger'), note));
+                wrap.appendChild(input);
+                wrap.appendChild(text);
+                optionsEl.appendChild(wrap);
+            });
+            if (!selected) {
+                optionsEl.appendChild(el('p', 'small text-muted mt-2 mb-0', 'No cohorts currently have room for this option. Use the admissions chat button or email info@voyagercyber.com.'));
+            }
         }
 
-        // Initialize timer immediately, then set interval and store its ID
-        updateCountdown();
-        countdownIntervalId = setInterval(updateCountdown, 1000);
+        function updateStructuredData() {
+            var tag = document.querySelector('script[type="application/ld+json"]');
+            if (!tag || !cohorts.length) return;
+            try {
+                var data = JSON.parse(tag.textContent);
+                var template = data.hasCourseInstance;
+                if (Array.isArray(template)) template = template[0];
+                data.hasCourseInstance = cohorts.map(function (c) {
+                    var inst = JSON.parse(JSON.stringify(template));
+                    inst.courseSchedule.startDate = c.start;
+                    inst.courseSchedule.endDate = c.end;
+                    return inst;
+                });
+                tag.textContent = JSON.stringify(data);
+            } catch (e) {}
+        }
 
-        // Cleanup interval on page unload to prevent memory leaks in Bootstrap/SPA environments
-        window.addEventListener('pagehide', () => {
-            if (countdownIntervalId) clearInterval(countdownIntervalId);
+        function renderAll() {
+            renderRows();
+            renderScheduleDates();
+            renderButtons();
+            renderOptions();
+        }
+
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                if (!btn.hasAttribute('data-cohort-checkout') || !window.bootstrap) return;
+                e.preventDefault();
+                activeBtn = btn;
+                renderOptions();
+                modal = modal || new bootstrap.Modal(document.getElementById('cohort-modal'));
+                modal.show();
+            });
         });
-    </script>
 
-    <script>
-        fetch('https://api.voyagercyber.com/api/seats')
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                var el = document.getElementById('seats-alert');
-                var btns = ['btn-starter', 'btn-professional', 'btn-career', 'btn-workforce', 'btn-workforce-cert'];
+        fetch(COHORTS_URL, { cache: 'no-cache' })
+            .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
+            .then(function (data) {
+                var now = Date.now();
+                cohorts = (data.cohorts || [])
+                    .filter(function (c) { return c && c.start && c.end && c.enrollBy && !c.hidden; })
+                    .map(function (c) {
+                        c.id = c.id || c.start;
+                        c.startDate = parseDay(c.start);
+                        c.endDate = parseDay(c.end);
+                        c.enrollByDate = parseDeadline(c.enrollBy);
+                        c.enrollByDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(c.enrollBy);
+                        c.remaining = null;
+                        return c;
+                    })
+                    .filter(function (c) { return c.enrollByDate.getTime() > now; })
+                    .sort(function (a, b) { return a.startDate - b.startDate; });
+                state = 'ready';
+                renderAll();
+                updateStructuredData();
 
-                if (data.remaining <= 0) {
-                    el.textContent = 'Sold Out — Next Cohort TBA';
-                    el.className = 'alert alert-danger text-center fw-bold mt-3';
-                    el.style.display = 'block';
-                    btns.forEach(function(id) {
-                        var btn = document.getElementById(id);
-                        if (btn) {
-                            btn.href = '#';
-                            btn.classList.remove('btn-primary');
-                            btn.classList.add('btn-secondary');
-                            btn.style.pointerEvents = 'none';
-                        }
-                    });
-                } else {
-                    // Workforce requires minimum 3 seats — disable both buttons if fewer remain
-                    var wfBtns = ['btn-workforce', 'btn-workforce-cert'];
-                    if (data.remaining < 3) {
-                        wfBtns.forEach(function(id) {
-                            var btn = document.getElementById(id);
-                            if (btn) {
-                                btn.href = '#';
-                                btn.classList.remove('btn-primary');
-                                btn.classList.add('btn-secondary');
-                                btn.style.pointerEvents = 'none';
-                                var wfMsg = document.createElement('p');
-                                wfMsg.className = 'small text-muted mt-2 mb-0';
-                                wfMsg.textContent = 'Workforce requires 3+ seats. Only ' + data.remaining + ' remaining.';
-                                btn.parentNode.appendChild(wfMsg);
-                            }
-                        });
-                    }
-                }
-
-                if (data.remaining > 0 && data.remaining < 5) {
-                    el.textContent = 'Only ' + data.remaining + ' seat' + (data.remaining === 1 ? '' : 's') + ' remaining for the July 29th cohort.';
-                    el.className = 'alert text-center fw-bold mt-3';
-                    el.style.display = 'block';
-                }
+                // Optional live seat counts: any endpoint returning { "remaining": <number> }
+                cohorts.forEach(function (c) {
+                    if (!c.seatsApi) return;
+                    fetch(c.seatsApi)
+                        .then(function (res) { return res.json(); })
+                        .then(function (s) {
+                            if (typeof s.remaining === 'number') { c.remaining = s.remaining; renderAll(); }
+                        })
+                        .catch(function () {});
+                });
             })
-            .catch(function() {});
+            .catch(function () {
+                state = 'error';
+                renderAll();
+            });
+    })();
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="text/javascript">
     var _clarityInit = false;

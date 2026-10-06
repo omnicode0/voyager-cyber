@@ -327,24 +327,57 @@ video, iframe {
 }
 
 
-/* --- countdown timer --- */
+/* --- cohort list + chooser (pricing page) --- */
 
-
-.countdown-container {
-  text-align: center;
-  margin: 2rem 0 0.5rem;
+.cohort-list {
+  max-width: 760px;
 }
 
-.countdown-label {
-  font-size: 1rem;
-  color: #666;
+.cohort-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  background: var(--white);
   margin-bottom: 0.5rem;
 }
 
-.countdown {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #dc2626;
+.cohort-row-status {
+  text-align: right;
+}
+
+.cohort-row.is-sold-out {
+  opacity: 0.6;
+}
+
+.cohort-option {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.cohort-option:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--bs-primary-bg-subtle);
+}
+
+.cohort-option.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 575.98px) {
+  .cohort-row-status {
+    text-align: left;
+  }
 }
 
 /* --- hamburger menu --- */
