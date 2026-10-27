@@ -155,7 +155,7 @@
         <div class="container">
             <div id="book-training" class="cohort-list mx-auto mb-4">
                 <h2 class="fw-bold text-center mb-3">Upcoming Cohorts</h2>
-                <!-- Rendered from cohorts.json — edit that file to add or remove dates -->
+                <!-- Rendered from the class schedule Google Sheet (fallback: cohorts.csv). See COHORTS.md -->
                 <div id="cohort-rows">
                     <p class="text-center text-muted mb-0">Loading upcoming cohort dates…</p>
                 </div>
@@ -258,7 +258,7 @@
                                     <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                     <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                                 </p>
-                                <a id="btn-workforce" data-cohort-checkout data-min-seats="3" class="btn btn-primary w-100" href="https://book.stripe.com/cNieVd4vw4ECalJfUjeIw09">
+                                <a id="btn-workforce" data-cohort-checkout class="btn btn-primary w-100" href="https://book.stripe.com/cNieVd4vw4ECalJfUjeIw09">
                                     Enroll My Team
                                 </a>
                             </div>
@@ -283,7 +283,7 @@
                                     <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and 
                                     <a href="refund.html" target="_blank" rel="noopener">Refund Policy</a>.
                                 </p>
-                                <a id="btn-workforce-cert" data-cohort-checkout data-min-seats="3" class="btn btn-primary w-100" href="https://book.stripe.com/8x23cv8LM7QO65teQfeIw0d">
+                                <a id="btn-workforce-cert" data-cohort-checkout class="btn btn-primary w-100" href="https://book.stripe.com/8x23cv8LM7QO65teQfeIw0d">
                                     Enroll My Team
                                 </a>
                             </div>
@@ -518,13 +518,17 @@
 
     <script>
     (function () {
-        // Cohort dates live in cohorts.json — edit that file to add/remove cohorts (see COHORTS.md).
-        var COHORTS_URL = 'cohorts.json';
+        // ===== Class schedule source =====
+        // The schedule lives in the "Voyager Cyber — Website Class Schedule" Google Sheet.
+        // Paste its "Publish to web" CSV link below (one-time setup, see COHORTS.md).
+        // While it's empty, or if the sheet can't be reached, the site uses cohorts.csv instead.
+        var SCHEDULE_CSV_URL = '';
+        var FALLBACK_CSV_URL = 'cohorts.csv';
         var DEFAULT_SCHEDULE = 'Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET';
-        var LOW_SEATS = 5;
 
-        var state = 'loading'; // loading | ready | error
-        var cohorts = [];      // open cohorts, soonest start first
+        var state = 'loading'; // loading | ready
+        var cohorts = [];      // everything shown in the list, in sheet order
+        var bookable = [];     // Open cohorts with valid dates, soonest first
         var activeBtn = null;
         var modal = null;
 
@@ -532,7 +536,10 @@
         var optionsEl = document.getElementById('cohort-options');
         var continueEl = document.getElementById('cohort-continue');
         var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-cohort-checkout]'));
-        buttons.forEach(function (btn) { btn.setAttribute('data-checkout', btn.href); });
+        buttons.forEach(function (btn) {
+            btn.setAttribute('data-checkout', btn.href);
+            btn.setAttribute('data-label', btn.textContent.trim());
+        });
 
         function el(tag, cls, text) {
             var node = document.createElement(tag);
@@ -541,20 +548,65 @@
             return node;
         }
 
-        // "2026-11-04" -> local midnight (avoids the UTC off-by-one of new Date("2026-11-04"))
-        function parseDay(str) {
-            var p = String(str).split('-');
-            return new Date(+p[0], +p[1] - 1, +p[2]);
+        // Minimal CSV parser (handles quoted cells, commas and line breaks inside quotes)
+        function parseCsv(text) {
+            var rows = [], row = [], cell = '', inQuotes = false;
+            text = String(text).replace(/^﻿/, '');
+            for (var i = 0; i < text.length; i++) {
+                var ch = text[i];
+                if (inQuotes) {
+                    if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+                    else if (ch === '"') inQuotes = false;
+                    else cell += ch;
+                } else if (ch === '"') inQuotes = true;
+                else if (ch === ',') { row.push(cell); cell = ''; }
+                else if (ch === '\n' || ch === '\r') {
+                    if (ch === '\r' && text[i + 1] === '\n') i++;
+                    row.push(cell); rows.push(row); row = []; cell = '';
+                } else cell += ch;
+            }
+            if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+            return rows;
         }
 
-        // Date-only deadlines run through the end of that day
-        function parseDeadline(str) {
-            if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
-                var d = parseDay(str);
-                d.setHours(23, 59, 59);
-                return d;
+        // Turn sheet rows into objects keyed by lower-case header ("start date", "status", ...)
+        function toRecords(rows) {
+            if (!rows.length) return [];
+            var headers = rows[0].map(function (h) { return h.trim().toLowerCase(); });
+            return rows.slice(1).map(function (r) {
+                var rec = {};
+                headers.forEach(function (h, i) { rec[h] = (r[i] || '').trim(); });
+                return rec;
+            }).filter(function (rec) {
+                return Object.keys(rec).some(function (k) { return rec[k]; });
+            });
+        }
+
+        // Accepts 2027-02-03, 2/3/2027 or 2/3/27. Returns {y, m, d} or null.
+        function parseDay(str) {
+            var m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(str);
+            var y, mo, d;
+            if (m) { y = +m[1]; mo = +m[2]; d = +m[3]; }
+            else {
+                m = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/.exec(str);
+                if (!m) return null;
+                mo = +m[1]; d = +m[2]; y = +m[3]; if (y < 100) y += 2000;
             }
-            return new Date(str);
+            var check = new Date(y, mo - 1, d);
+            if (check.getFullYear() !== y || check.getMonth() !== mo - 1 || check.getDate() !== d) return null;
+            return { y: y, m: mo, d: d };
+        }
+
+        function localDate(p) { return new Date(p.y, p.m - 1, p.d); }
+
+        // 11:59:59 PM Eastern on that day, correct across daylight saving changes
+        function easternEndOfDay(p) {
+            for (var off = 4; off <= 5; off++) {
+                var t = new Date(Date.UTC(p.y, p.m - 1, p.d, 23 + off, 59, 59));
+                var hour = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', hourCycle: 'h23' }).format(t);
+                if (+hour === 23) return t;
+            }
+            return new Date(Date.UTC(p.y, p.m - 1, p.d + 1, 4, 59, 59));
         }
 
         function fmt(d, withYear) {
@@ -563,9 +615,7 @@
             return d.toLocaleDateString('en-US', opts);
         }
 
-        // Deadlines are exact moments, so show them in Eastern time like the class schedule
         function fmtDeadline(c) {
-            if (c.enrollByDateOnly) return fmt(c.enrollByDate);
             return c.enrollByDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
         }
 
@@ -575,82 +625,89 @@
         }
 
         function timeLeft(c) {
-            var ms = c.enrollByDate - Date.now();
-            var hours = Math.floor(ms / 3600000);
+            var hours = Math.floor((c.enrollByDate - Date.now()) / 3600000);
             if (hours < 48) return hours <= 1 ? 'closing now' : hours + ' hours left';
             return Math.floor(hours / 24) + ' days left';
         }
 
-        function isSoldOut(c) {
-            return c.soldOut === true || (c.remaining != null && c.remaining <= 0);
+        function title(c) {
+            if (c.kind === 'placeholder') return c.name || 'Next cohort';
+            return (c.name ? c.name + ': ' : '') + dateRange(c);
         }
 
-        function seatsText(c) {
-            if (isSoldOut(c)) return 'Sold out';
-            if (c.remaining != null && c.remaining < LOW_SEATS) {
-                return 'Only ' + c.remaining + ' seat' + (c.remaining === 1 ? '' : 's') + ' left';
-            }
-            return '';
-        }
-
-        function tierKey(btn) { return btn.id.replace(/^btn-/, ''); }
-
-        function tierName(btn) {
-            var h = btn.closest('.card-body').querySelector('h3');
-            return h ? h.textContent.trim() : '';
+        // Status column: Open / Sold Out / Coming Soon / Hidden (anything else counts as Coming Soon)
+        function buildCohorts(records) {
+            var now = Date.now();
+            var list = [];
+            records.forEach(function (r, i) {
+                var status = (r['status'] || '').toLowerCase().replace(/[^a-z]/g, '');
+                if (status === 'hidden') return;
+                var c = {
+                    name: r['cohort'] || '',
+                    schedule: r['schedule'] || DEFAULT_SCHEDULE,
+                    kind: 'placeholder'
+                };
+                var start = parseDay(r['start date'] || '');
+                var end = parseDay(r['end date'] || '');
+                var enrollBy = parseDay(r['enroll by'] || '');
+                if ((status === 'open' || status === 'soldout') && start && end && enrollBy) {
+                    c.kind = status === 'open' ? 'open' : 'soldout';
+                    c.startDate = localDate(start);
+                    c.endDate = localDate(end);
+                    c.enrollByDate = easternEndOfDay(enrollBy);
+                    c.isoStart = start.y + '-' + ('0' + start.m).slice(-2) + '-' + ('0' + start.d).slice(-2);
+                    c.isoEnd = end.y + '-' + ('0' + end.m).slice(-2) + '-' + ('0' + end.d).slice(-2);
+                    c.id = c.isoStart;
+                    if (c.enrollByDate.getTime() <= now) return; // enrollment closed: drop it
+                } else if (status === 'open' || status === 'soldout') {
+                    if (window.console) console.warn('Class schedule row ' + (i + 2) + ' is ' + r['status'] + ' but has a missing or unreadable date; showing it as "Dates coming soon".');
+                    if (!c.name) return;
+                } else if (!c.name) {
+                    return; // a placeholder needs at least a name
+                }
+                list.push(c);
+            });
+            return list;
         }
 
         function checkoutUrl(btn, c) {
-            var base = (c.checkout && c.checkout[tierKey(btn)]) || btn.getAttribute('data-checkout');
-            var url = new URL(base);
-            // Stripe Payment Links record this on the payment so you can see which cohort was bought
-            url.searchParams.set('client_reference_id', 'cohort_' + String(c.id).replace(/[^A-Za-z0-9_-]/g, '-'));
+            var url = new URL(btn.getAttribute('data-checkout'));
+            // Stored on the Stripe payment so you can see which cohort was bought
+            url.searchParams.set('client_reference_id', 'cohort_' + c.id);
             return url.toString();
         }
 
-        function unavailableReason(btn, c) {
-            if (isSoldOut(c)) return 'Sold out';
-            var min = +btn.getAttribute('data-min-seats') || 1;
-            if (c.remaining != null && c.remaining < min) {
-                return 'Requires ' + min + '+ seats — only ' + c.remaining + ' left';
-            }
-            return '';
+        function waitlistLink(text) {
+            var a = el('a', 'fw-bold', text);
+            a.href = '#waitlist';
+            a.addEventListener('click', function () { if (modal) modal.hide(); });
+            return a;
         }
 
         function renderRows() {
             rowsEl.innerHTML = '';
-            if (state === 'error') {
-                var err = el('p', 'text-center text-muted mb-0', 'Cohort dates couldn’t load. Email ');
-                var mail = el('a', '', 'info@voyagercyber.com');
-                mail.href = 'mailto:info@voyagercyber.com';
-                err.appendChild(mail);
-                err.appendChild(document.createTextNode(' and we’ll get you scheduled.'));
-                rowsEl.appendChild(err);
-                return;
-            }
             if (!cohorts.length) {
                 var none = el('p', 'text-center mb-0', 'New cohort dates are coming soon. ');
-                var wl = el('a', 'fw-bold', 'Join the waitlist');
-                wl.href = '#waitlist';
-                none.appendChild(wl);
+                none.appendChild(waitlistLink('Join the waitlist'));
                 none.appendChild(document.createTextNode(' to hear first.'));
                 rowsEl.appendChild(none);
                 return;
             }
             cohorts.forEach(function (c) {
-                var soldOut = isSoldOut(c);
-                var row = el('div', 'cohort-row' + (soldOut ? ' is-sold-out' : ''));
+                var row = el('div', 'cohort-row' + (c.kind === 'soldout' ? ' is-sold-out' : ''));
                 var left = el('div');
-                left.appendChild(el('div', 'fw-bold', (c.label ? c.label + ': ' : '') + dateRange(c)));
-                left.appendChild(el('div', 'small text-muted', c.schedule || DEFAULT_SCHEDULE));
+                left.appendChild(el('div', 'fw-bold', title(c)));
+                left.appendChild(el('div', 'small text-muted', c.kind === 'placeholder' ? 'Dates coming soon' : c.schedule));
                 var right = el('div', 'cohort-row-status small');
-                if (!soldOut) {
+                if (c.kind === 'open') {
                     var line = el('div', '', 'Enroll by ' + fmtDeadline(c) + ' · ');
                     line.appendChild(el('span', 'fw-bold text-danger', timeLeft(c)));
                     right.appendChild(line);
+                } else if (c.kind === 'soldout') {
+                    right.appendChild(el('span', 'badge bg-secondary', 'Sold out'));
+                } else {
+                    right.appendChild(waitlistLink('Get notified'));
                 }
-                var seats = seatsText(c);
-                if (seats) right.appendChild(el('span', 'badge ' + (soldOut ? 'bg-secondary' : 'bg-danger'), seats));
                 row.appendChild(left);
                 row.appendChild(right);
                 rowsEl.appendChild(row);
@@ -659,32 +716,31 @@
 
         function renderScheduleDates() {
             var span = document.getElementById('schedule-start-dates');
-            if (!span || state !== 'ready') return;
-            span.textContent = cohorts.length
-                ? cohorts.map(function (c) { return fmt(c.startDate, true); }).join(' · ')
-                : 'New dates coming soon';
+            if (!span) return;
+            span.textContent = bookable.length
+                ? bookable.map(function (c) { return fmt(c.startDate, true); }).join(' · ')
+                : 'Coming soon';
         }
 
         function renderButtons() {
-            if (state !== 'ready' || cohorts.length) return;
-            // Nothing open: send people to the waitlist instead of checkout
+            // Nothing bookable: send people to the waitlist instead of checkout
+            var open = bookable.length > 0;
             buttons.forEach(function (btn) {
-                btn.textContent = 'Join the Waitlist';
-                btn.href = '#waitlist';
-                btn.removeAttribute('data-cohort-checkout');
+                btn.textContent = open ? btn.getAttribute('data-label') : 'Join the Waitlist';
+                btn.href = open ? btn.getAttribute('data-checkout') : '#waitlist';
             });
         }
 
         function setContinue(href) {
-            if (href) {
-                continueEl.href = href;
-                continueEl.classList.remove('disabled');
-                continueEl.removeAttribute('aria-disabled');
-            } else {
-                continueEl.href = '#';
-                continueEl.classList.add('disabled');
-                continueEl.setAttribute('aria-disabled', 'true');
-            }
+            continueEl.href = href || '#';
+            continueEl.classList.toggle('disabled', !href);
+            if (href) continueEl.removeAttribute('aria-disabled');
+            else continueEl.setAttribute('aria-disabled', 'true');
+        }
+
+        function tierName(btn) {
+            var h = btn.closest('.card-body').querySelector('h3');
+            return h ? h.textContent.trim() : '';
         }
 
         function renderOptions() {
@@ -693,71 +749,88 @@
             document.getElementById('cohort-modal-tier').textContent = tierName(btn) + ' — select the cohort you’re reserving a seat in.';
             optionsEl.innerHTML = '';
             setContinue(null);
-
             if (state === 'loading') {
                 optionsEl.appendChild(el('p', 'text-muted mb-0', 'Loading cohort dates…'));
                 return;
             }
-            if (state === 'error') {
-                optionsEl.appendChild(el('p', 'mb-0', 'We couldn’t load cohort dates. You can still check out — we’ll confirm your start date by email.'));
-                setContinue(btn.getAttribute('data-checkout'));
+            if (!bookable.length) {
+                var none = el('p', 'mb-0', 'No cohorts are open for enrollment right now. ');
+                none.appendChild(waitlistLink('Join the waitlist'));
+                none.appendChild(document.createTextNode(' to hear first.'));
+                optionsEl.appendChild(none);
                 return;
             }
-
-            var selected = false;
-            cohorts.forEach(function (c, i) {
-                var reason = unavailableReason(btn, c);
+            bookable.forEach(function (c, i) {
                 var id = 'cohort-opt-' + i;
-                var wrap = el('label', 'cohort-option' + (reason ? ' is-disabled' : ''));
+                var wrap = el('label', 'cohort-option');
                 wrap.setAttribute('for', id);
                 var input = el('input', 'form-check-input mt-1');
                 input.type = 'radio';
                 input.name = 'cohort-choice';
                 input.id = id;
-                input.disabled = !!reason;
-                if (!reason && !selected) { input.checked = true; selected = true; setContinue(checkoutUrl(btn, c)); }
+                if (i === 0) { input.checked = true; setContinue(checkoutUrl(btn, c)); }
                 input.addEventListener('change', function () { setContinue(checkoutUrl(btn, c)); });
                 var text = el('span', 'flex-grow-1');
-                text.appendChild(el('span', 'd-block fw-bold', (c.label ? c.label + ': ' : '') + dateRange(c)));
-                text.appendChild(el('span', 'd-block small text-muted', c.schedule || DEFAULT_SCHEDULE));
-                var note = reason || seatsText(c) || ('Enroll by ' + fmtDeadline(c));
-                text.appendChild(el('span', 'd-block small ' + (reason ? 'text-muted' : 'text-danger'), note));
+                text.appendChild(el('span', 'd-block fw-bold', title(c)));
+                text.appendChild(el('span', 'd-block small text-muted', c.schedule));
+                text.appendChild(el('span', 'd-block small text-danger', 'Enroll by ' + fmtDeadline(c)));
                 wrap.appendChild(input);
                 wrap.appendChild(text);
                 optionsEl.appendChild(wrap);
             });
-            if (!selected) {
-                optionsEl.appendChild(el('p', 'small text-muted mt-2 mb-0', 'No cohorts currently have room for this option. Use the admissions chat button or email info@voyagercyber.com.'));
-            }
         }
 
         function updateStructuredData() {
             var tag = document.querySelector('script[type="application/ld+json"]');
-            if (!tag || !cohorts.length) return;
+            if (!tag || !bookable.length) return;
             try {
                 var data = JSON.parse(tag.textContent);
                 var template = data.hasCourseInstance;
                 if (Array.isArray(template)) template = template[0];
-                data.hasCourseInstance = cohorts.map(function (c) {
+                data.hasCourseInstance = bookable.map(function (c) {
                     var inst = JSON.parse(JSON.stringify(template));
-                    inst.courseSchedule.startDate = c.start;
-                    inst.courseSchedule.endDate = c.end;
+                    inst.courseSchedule.startDate = c.isoStart;
+                    inst.courseSchedule.endDate = c.isoEnd;
                     return inst;
                 });
                 tag.textContent = JSON.stringify(data);
             } catch (e) {}
         }
 
-        function renderAll() {
+        function apply(records) {
+            var all = buildCohorts(records);
+            // Dated cohorts in start-date order, then "coming soon" placeholders in sheet order
+            var dated = all.filter(function (c) { return c.kind !== 'placeholder'; })
+                .sort(function (a, b) { return a.startDate - b.startDate; });
+            cohorts = dated.concat(all.filter(function (c) { return c.kind === 'placeholder'; }));
+            bookable = dated.filter(function (c) { return c.kind === 'open'; });
+            state = 'ready';
             renderRows();
             renderScheduleDates();
             renderButtons();
             renderOptions();
+            updateStructuredData();
+        }
+
+        function load(url) {
+            return fetch(url, { cache: 'no-cache' }).then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.text();
+            }).then(function (text) {
+                var rows = parseCsv(text);
+                // Guard against a wrong link (e.g. an HTML page): the sheet must have these columns
+                var headers = (rows[0] || []).map(function (h) { return h.trim().toLowerCase(); });
+                if (headers.indexOf('cohort') === -1 || headers.indexOf('status') === -1) {
+                    throw new Error('Unexpected schedule format');
+                }
+                return toRecords(rows);
+            });
         }
 
         buttons.forEach(function (btn) {
             btn.addEventListener('click', function (e) {
-                if (!btn.hasAttribute('data-cohort-checkout') || !window.bootstrap) return;
+                if (state === 'ready' && !bookable.length) return; // goes to #waitlist
+                if (!window.bootstrap) return;                       // plain link fallback
                 e.preventDefault();
                 activeBtn = btn;
                 renderOptions();
@@ -766,42 +839,11 @@
             });
         });
 
-        fetch(COHORTS_URL, { cache: 'no-cache' })
-            .then(function (res) { if (!res.ok) throw new Error(res.status); return res.json(); })
-            .then(function (data) {
-                var now = Date.now();
-                cohorts = (data.cohorts || [])
-                    .filter(function (c) { return c && c.start && c.end && c.enrollBy && !c.hidden; })
-                    .map(function (c) {
-                        c.id = c.id || c.start;
-                        c.startDate = parseDay(c.start);
-                        c.endDate = parseDay(c.end);
-                        c.enrollByDate = parseDeadline(c.enrollBy);
-                        c.enrollByDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(c.enrollBy);
-                        c.remaining = null;
-                        return c;
-                    })
-                    .filter(function (c) { return c.enrollByDate.getTime() > now; })
-                    .sort(function (a, b) { return a.startDate - b.startDate; });
-                state = 'ready';
-                renderAll();
-                updateStructuredData();
-
-                // Optional live seat counts: any endpoint returning { "remaining": <number> }
-                cohorts.forEach(function (c) {
-                    if (!c.seatsApi) return;
-                    fetch(c.seatsApi)
-                        .then(function (res) { return res.json(); })
-                        .then(function (s) {
-                            if (typeof s.remaining === 'number') { c.remaining = s.remaining; renderAll(); }
-                        })
-                        .catch(function () {});
-                });
-            })
-            .catch(function () {
-                state = 'error';
-                renderAll();
-            });
+        var primary = SCHEDULE_CSV_URL ? load(SCHEDULE_CSV_URL) : Promise.reject(new Error('no sheet'));
+        primary
+            .catch(function () { return load(FALLBACK_CSV_URL); })
+            .then(apply)
+            .catch(function () { apply([]); });
     })();
     </script>
 
