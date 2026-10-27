@@ -1,11 +1,12 @@
 /*
- * Enrollment page: 1. pick a class date → 2. pick an option → 3. review → Stripe checkout.
- * The current choices live in the URL (enroll.html?cohort=…&tier=…&step=…), so the browser's
- * Back button works and the pricing page can link straight into a step.
+ * Enrollment page. Step 1 (the class date) is picked on pricing.html ("Select this date"),
+ * which opens enroll.html?cohort=<id>. This page handles 2. pick an option → 3. review →
+ * Stripe checkout. Choices live in the URL (…&tier=…&step=…), so the browser's Back button works.
  */
 (function () {
     var VS = window.VoyagerSchedule;
     var STEPS = ['date', 'option', 'review'];
+    var DATES_URL = 'pricing.html#book-training';
 
     var panel = document.getElementById('step-panel');
     var stepsEl = document.getElementById('enroll-steps');
@@ -108,57 +109,13 @@
         });
     }
 
-    // ---- step 1: date ----
-
-    function renderDate(p) {
-        var body = card();
-        body.appendChild(el('h2', 'h5 fw-bold mb-1', 'Choose your class dates'));
-        body.appendChild(el('p', 'small text-muted mb-3', 'All classes are live online with the same instructor and curriculum.'));
-
-        if (!data.bookable.length) {
-            var none = el('p', 'mb-3', 'No classes are open for enrollment right now. ');
-            none.appendChild(link('fw-bold', 'Join the waitlist', 'pricing.html#waitlist'));
-            none.appendChild(document.createTextNode(' and we’ll email you when dates open.'));
-            body.appendChild(none);
-        }
-
-        var selected = findCohort(p.cohort) ? p.cohort : (data.bookable[0] && data.bookable[0].id);
-        data.cohorts.forEach(function (c) {
-            var nodes = [el('span', 'd-block fw-bold', VS.title(c))];
-            if (c.kind === 'open') {
-                nodes.push(el('span', 'd-block small text-muted', c.schedule));
-                var line = el('span', 'd-block small', 'Enroll by ' + VS.fmtDeadline(c) + ' · ');
-                line.appendChild(el('span', 'fw-bold text-danger', VS.timeLeft(c)));
-                nodes.push(line);
-            } else if (c.kind === 'soldout') {
-                nodes.push(el('span', 'd-block small text-muted', c.schedule));
-                nodes.push(el('span', 'badge bg-secondary', 'Sold out'));
-            } else {
-                var soon = el('span', 'd-block small text-muted', 'Dates coming soon · ');
-                soon.appendChild(link('', 'Get notified', 'pricing.html#waitlist'));
-                nodes.push(soon);
-            }
-            body.appendChild(radioOption('cohort', c.id || ('placeholder-' + data.cohorts.indexOf(c)),
-                c.kind === 'open' && c.id === selected, c.kind !== 'open', nodes,
-                function (v) { selected = v; }));
-        });
-
-        actions(body, 'Back', function () { window.location.href = 'pricing.html'; },
-            'Continue', function () {
-                if (!findCohort(selected)) return;
-                go({ cohort: selected, tier: p.tier, step: 'option' });
-            }, !data.bookable.length);
-    }
-
     // ---- step 2: option ----
 
     function renderOption(p, cohort) {
         var body = card();
         body.appendChild(el('h2', 'h5 fw-bold mb-1', 'Choose your option'));
         var picked = el('p', 'small text-muted mb-3', 'Class: ' + VS.title(cohort) + ' · ');
-        picked.appendChild(button('btn btn-link btn-sm p-0 w-auto align-baseline', 'Change date', function () {
-            go({ cohort: cohort.id, tier: p.tier, step: 'date' });
-        }));
+        picked.appendChild(link('small', 'Change date', DATES_URL));
         body.appendChild(picked);
 
         var selected = VS.tier(p.tier) ? p.tier : 'professional';
@@ -176,8 +133,12 @@
             });
         });
 
-        actions(body, 'Back', function () { go({ cohort: cohort.id, tier: selected, step: 'date' }); },
-            'Continue', function () { go({ cohort: cohort.id, tier: selected, step: 'review' }); });
+        actions(body, 'Back', function () { window.location.href = DATES_URL; },
+            'Continue', function () {
+                // Remember the choice on this step's history entry so Back returns to it
+                history.replaceState(null, '', VS.enrollUrl({ cohort: cohort.id, tier: selected, step: 'option' }));
+                go({ cohort: cohort.id, tier: selected, step: 'review' });
+            });
     }
 
     // ---- step 3: review ----
@@ -200,7 +161,7 @@
             el('div', 'fw-bold', VS.title(cohort)),
             el('div', 'small text-muted', cohort.schedule),
             el('div', 'small', 'Enrollment closes ' + VS.fmtDeadline(cohort) + ' at 11:59 PM ET')
-        ], function () { go({ cohort: cohort.id, tier: tier.key, step: 'date' }); }));
+        ], function () { window.location.href = DATES_URL; }));
 
         var tierNodes = [
             el('div', 'fw-bold', tier.name + ' — ' + tier.price + (tier.per ? ' ' + tier.per : '')),
@@ -234,8 +195,7 @@
             // Enrollment may have closed while the page was open
             if (!stillOpen(cohort)) {
                 e.preventDefault();
-                go({ tier: tier.key, step: 'date' });
-                showAlert('Enrollment for that class has just closed. Please choose another date.');
+                window.location.href = 'pricing.html?notice=closed#book-training';
             }
         });
         bar.appendChild(pay);
@@ -248,22 +208,19 @@
         var p = params();
         var cohort = findCohort(p.cohort);
         var tier = VS.tier(p.tier);
-        var step = STEPS.indexOf(p.step) >= 0 ? p.step : (cohort ? (tier ? 'review' : 'option') : 'date');
 
-        // A step needs everything chosen before it; otherwise fall back to the first missing choice
-        if (step !== 'date' && !cohort) {
-            if (p.cohort) showAlert('That class is no longer open for enrollment. Please choose another date.');
-            step = 'date';
-        } else if (step === 'review' && !tier) {
-            step = 'option';
+        // No valid open class chosen: the date is picked on the pricing page
+        if (!cohort) {
+            window.location.replace(p.cohort ? 'pricing.html?notice=closed#book-training' : DATES_URL);
+            return;
         }
+        var step = p.step === 'review' && tier ? 'review' : 'option';
         if (p.step && p.step !== step) {
-            history.replaceState(null, '', VS.enrollUrl({ cohort: cohort ? cohort.id : '', tier: p.tier, step: step }));
+            history.replaceState(null, '', VS.enrollUrl({ cohort: cohort.id, tier: p.tier, step: step }));
         }
 
         setStepper(step);
-        if (step === 'date') renderDate(p);
-        else if (step === 'option') renderOption(p, cohort);
+        if (step === 'option') renderOption(p, cohort);
         else renderReview(p, cohort, tier);
     }
 

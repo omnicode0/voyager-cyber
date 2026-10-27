@@ -154,7 +154,9 @@
     <section id="enroll" class="py-5">
         <div class="container">
             <div id="book-training" class="cohort-list mx-auto mb-4">
-                <h2 class="fw-bold text-center mb-3">Upcoming Cohorts</h2>
+                <h2 class="fw-bold text-center mb-1">Upcoming Cohorts</h2>
+                <p id="cohort-intro" class="text-center text-muted mb-3">Select a date to see enrollment options.</p>
+                <div id="cohort-notice" class="alert alert-warning small d-none" role="alert"></div>
                 <!-- Rendered from the class schedule Google Sheet (fallback: cohorts.csv). See COHORTS.md -->
                 <div id="cohort-rows">
                     <p class="text-center text-muted mb-0">Loading upcoming cohort dates…</p>
@@ -163,10 +165,6 @@
                     ✓ <strong>Flexible Enrollment Protection:</strong> full refund if you cancel 14+ days before your cohort starts.
                     <a href="refund.html">Refund Policy</a>
                 </p>
-            </div>
-            <div class="text-center mt-3">
-                <a id="btn-enroll" data-enroll-tier class="btn btn-primary btn-lg" href="enroll.html">Enroll Now</a>
-                <p id="enroll-hint" class="small text-muted mt-2 mb-0">Pick your date, then choose an individual or team option.</p>
             </div>
 
             <h2 class="fw-bold text-center mt-5 mb-4">Add-Ons</h2>
@@ -373,7 +371,6 @@
     (function () {
         var VS = window.VoyagerSchedule;
         var rowsEl = document.getElementById('cohort-rows');
-        var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-enroll-tier]'));
 
         function el(tag, cls, text) {
             var node = document.createElement(tag);
@@ -436,22 +433,23 @@
             } catch (e) {}
         }
 
+        // Sent back from the enrollment page because the chosen class just closed
+        if (/(^|[?&])notice=closed(&|$)/.test(window.location.search)) {
+            var notice = document.getElementById('cohort-notice');
+            notice.textContent = 'Enrollment for that class has closed. Please select another date.';
+            notice.classList.remove('d-none');
+        }
+
         VS.load().then(function (result) {
             renderRows(result.cohorts);
+            if (!result.bookable.length) {
+                document.getElementById('cohort-intro').textContent = 'New dates are coming soon.';
+            }
             var span = document.getElementById('schedule-start-dates');
             if (span) {
                 span.textContent = result.bookable.length
                     ? result.bookable.map(function (c) { return VS.fmt(c.startDate, true); }).join(' · ')
                     : 'Coming soon';
-            }
-            // Nothing open: send people to the waitlist instead of the enrollment page
-            if (!result.bookable.length) {
-                var hint = document.getElementById('enroll-hint');
-                if (hint) hint.textContent = 'New dates are coming soon. Join the waitlist to hear first.';
-                buttons.forEach(function (btn) {
-                    btn.textContent = 'Join the Waitlist';
-                    btn.href = '#waitlist';
-                });
             }
             updateStructuredData(result.bookable);
         });

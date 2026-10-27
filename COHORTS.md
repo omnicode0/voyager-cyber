@@ -28,12 +28,12 @@ When no cohort is Open, every buy button changes to "Join the Waitlist".
 
 ## Enrollment flow
 
-1. **Pricing page** (`pricing.html`): visitors see every class, then the exam-voucher add-on. "Select this date" on an open class, or the "Enroll Now" button, opens the enrollment page. Option prices are only shown on the enrollment page.
-2. **Enrollment page** (`enroll.html`), all on voyagercyber.com:
-   1. **Date**: pick an open class.
-   2. **Option**: pick Starter, Professional, Career Accelerator, Workforce Training or Workforce Certification.
-   3. **Review**: confirm class and option, with the refund and terms notes.
-3. **Stripe** is the last step: "Continue to Secure Payment" goes to that option's Stripe Payment Link with `?client_reference_id=cohort_<Class ID>` added. Stripe stores that value on the payment, so each payment shows which class it was for.
+1. **Date** — on the pricing page (`pricing.html`). Every class is listed; open ones have a **Select this date** button. This is the only way into enrollment.
+2. **Option** — on the enrollment page (`enroll.html`): Starter, Professional, Career Accelerator, Workforce Training or Workforce Certification.
+3. **Review** — the class and option, each with a Change link, plus the refund and terms notes.
+4. **Stripe** is the last step: "Continue to Secure Payment" goes to that option's Stripe Payment Link with `?client_reference_id=cohort_<Class ID>` added. Stripe stores that value on the payment, so each payment shows which class it was for.
+
+"Change date", Back on the option step, and the "1 Date" step marker all return to the class list on the pricing page. If a class closes, or a link points at a class that isn't open, the visitor is sent back to the class list with a notice.
 
 Option names, prices, features and Stripe Payment Links are set in one place: the `TIERS` list in `js/schedule.js`. The exam-voucher add-on still goes straight to Stripe because it isn't tied to a class.
 
