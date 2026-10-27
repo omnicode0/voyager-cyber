@@ -175,6 +175,12 @@
                 }
                 usedIds[c.id] = true;
                 if (c.enrollByDate.getTime() <= now) return; // enrollment closed: drop it
+            } else if (status === 'comingsoon' && start && end) {
+                // Dates are set but enrollment isn't open yet: show the dates, no checkout
+                c.kind = 'upcoming';
+                c.startDate = localDate(start);
+                c.endDate = localDate(end);
+                if (c.startDate.getTime() <= now) return; // class already started: drop it
             } else if (status === 'open' || status === 'soldout') {
                 if (window.console) console.warn('Class schedule row ' + (i + 2) + ' is ' + r['status'] + ' but has a missing or unreadable date; showing it as "Dates coming soon".');
                 if (!c.name) return;

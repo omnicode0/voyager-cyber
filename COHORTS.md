@@ -19,7 +19,8 @@ The sheet is published (File → Share → Publish to web, CSV), and its link is
 
 What each status does:
 
-- **Coming Soon**: shows the name with "Dates coming soon" and a "Get notified" link to the waitlist. No dates or payment.
+- **Coming Soon** with Start Date and End Date filled in: shows the dates with "Enrollment not open yet" and a "Get notified when enrollment opens" link to the waitlist. It can't be selected or bought. Enroll By is optional here. Use this for classes you've scheduled but aren't enrolling yet; switch to Open when enrollment starts. It drops off once its start date passes.
+- **Coming Soon** without dates: shows the name with "Dates coming soon" and a "Get notified" link.
 - **Open / Enrolling Now**: shows dates and the enroll-by countdown, and appears in the "Choose Your Cohort" step at checkout. Needs all three dates; if one is missing or unreadable, the row shows as "Dates coming soon" instead.
 - **Sold Out**: shows the dates with a "Sold out" badge. Can't be bought.
 - **Hidden**: not shown at all.
