@@ -78,8 +78,9 @@
         return next;
     }
 
+    var optionCount = 0;
     function radioOption(name, value, checked, disabled, contentNodes, onSelect) {
-        var id = name + '-' + value;
+        var id = 'opt-' + name + '-' + (++optionCount); // unique per element, independent of the value
         var wrap = el('label', 'cohort-option' + (disabled ? ' is-disabled' : ''));
         wrap.setAttribute('for', id);
         var input = el('input', 'form-check-input mt-1 flex-shrink-0');

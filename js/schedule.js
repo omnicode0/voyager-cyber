@@ -148,6 +148,7 @@
     function buildCohorts(records) {
         var now = Date.now();
         var list = [];
+        var usedIds = {};
         records.forEach(function (r, i) {
             var status = normalizeStatus(r['status'] || '');
             if (status === 'hidden') return;
@@ -164,6 +165,15 @@
                 c.isoEnd = isoDay(end);
                 // Optional "Class ID" column (e.g. 27-001); otherwise the start date is the ID
                 c.id = (r['class id'] || c.isoStart).replace(/[^A-Za-z0-9_-]/g, '-');
+                // Two classes must never share an ID (it identifies the class in Stripe).
+                // Same start date and no Class ID: the later sheet row gets -2, -3, ...
+                if (usedIds[c.id]) {
+                    var n = 2;
+                    while (usedIds[c.id + '-' + n]) n++;
+                    if (window.console) console.warn('Class schedule row ' + (i + 2) + ' has the same ID as an earlier row (' + c.id + '); using ' + c.id + '-' + n + '. Add a unique Class ID to avoid this.');
+                    c.id = c.id + '-' + n;
+                }
+                usedIds[c.id] = true;
                 if (c.enrollByDate.getTime() <= now) return; // enrollment closed: drop it
             } else if (status === 'open' || status === 'soldout') {
                 if (window.console) console.warn('Class schedule row ' + (i + 2) + ' is ' + r['status'] + ' but has a missing or unreadable date; showing it as "Dates coming soon".');

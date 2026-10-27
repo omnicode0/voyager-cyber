@@ -14,7 +14,7 @@ The sheet is published (File → Share → Publish to web, CSV), and its link is
 | End Date | Same format. |
 | Enroll By | Last day to enroll. Enrollment closes at 11:59 PM Eastern that day, and the cohort then drops off the site automatically. |
 | Schedule | Optional. Defaults to `Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET`. |
-| Class ID | Optional, e.g. `27-001`. Sent to Stripe to identify the class. Without it the start date is used, e.g. `2027-06-25`. Never change it after a class has sales. |
+| Class ID | Optional but recommended, e.g. `27-001`. Sent to Stripe to identify the class. Without it the start date is used, e.g. `2027-06-25`; two classes with the same start date get `2027-06-25` and `2027-06-25-2` in sheet order, so adding a Class ID is clearer. Never change it after a class has sales. |
 | Notes | For you only. Never shown on the site. |
 
 What each status does:
@@ -28,13 +28,13 @@ When no cohort is Open, every buy button changes to "Join the Waitlist".
 
 ## Enrollment flow
 
-1. **Pricing page** (`pricing.html`): visitors see every class. "Select this date" on an open class, or any "Reserve My Seat" / "Enroll My Team" button, opens the enrollment page.
+1. **Pricing page** (`pricing.html`): visitors see every class, then the exam-voucher add-on. "Select this date" on an open class, or the "Enroll Now" button, opens the enrollment page. Option prices are only shown on the enrollment page.
 2. **Enrollment page** (`enroll.html`), all on voyagercyber.com:
    1. **Date**: pick an open class.
    2. **Option**: pick Starter, Professional, Career Accelerator, Workforce Training or Workforce Certification.
    3. **Review**: confirm class and option, with the refund and terms notes.
 3. **Stripe** is the last step: "Continue to Secure Payment" goes to that option's Stripe Payment Link with `?client_reference_id=cohort_<Class ID>` added. Stripe stores that value on the payment, so each payment shows which class it was for.
 
-Prices, features and Stripe Payment Links for the enrollment page are set in one place: the `TIERS` list in `js/schedule.js`. The cards on the pricing page are plain HTML; if you change a price, update both. The exam-voucher add-on still goes straight to Stripe because it isn't tied to a class.
+Option names, prices, features and Stripe Payment Links are set in one place: the `TIERS` list in `js/schedule.js`. The exam-voucher add-on still goes straight to Stripe because it isn't tied to a class.
 
 **Before setting a cohort to Open:** the `voyager-cyber-api` webhook assigns every order to the single *active* cohort in D1 and sends that cohort's welcome email. Make the new cohort the active one in D1 and update the welcome email (dates, calendar link), or change the webhook to read `client_reference_id`. Otherwise buyers get booked into, and emailed about, the wrong class.
