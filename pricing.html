@@ -520,9 +520,9 @@
     (function () {
         // ===== Class schedule source =====
         // The schedule lives in the "Voyager Cyber — Website Class Schedule" Google Sheet.
-        // Paste its "Publish to web" CSV link below (one-time setup, see COHORTS.md).
+        // This is its "Publish to web" CSV link (see COHORTS.md).
         // While it's empty, or if the sheet can't be reached, the site uses cohorts.csv instead.
-        var SCHEDULE_CSV_URL = '';
+        var SCHEDULE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9XTpBOx6Iv56S28Up7QZ7CAfcl6jWCaic17l_r4enpLKBzYaoZVr5BomF8b81FWjM5chbCj3mDExh/pub?gid=956183842&single=true&output=csv';
         var FALLBACK_CSV_URL = 'cohorts.csv';
         var DEFAULT_SCHEDULE = 'Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET';
 
@@ -582,16 +582,21 @@
             });
         }
 
-        // Accepts 2027-02-03, 2/3/2027 or 2/3/27. Returns {y, m, d} or null.
+        var MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+        function monthNum(name) { return MONTHS.indexOf(name.slice(0, 3).toLowerCase()) + 1; }
+
+        // Accepts 2027-02-03, 2/3/2027, 2/3/27, 3Feb2027, 3 Feb 2027, 3-Feb-2027, Feb 3, 2027,
+        // February 3 2027. Returns {y, m, d} or null.
         function parseDay(str) {
-            var m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(str);
-            var y, mo, d;
-            if (m) { y = +m[1]; mo = +m[2]; d = +m[3]; }
-            else {
-                m = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/.exec(str);
-                if (!m) return null;
-                mo = +m[1]; d = +m[2]; y = +m[3]; if (y < 100) y += 2000;
-            }
+            str = String(str).trim();
+            var m, y, mo, d;
+            if ((m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(str))) { y = +m[1]; mo = +m[2]; d = +m[3]; }
+            else if ((m = /^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/.exec(str))) { mo = +m[1]; d = +m[2]; y = +m[3]; }
+            else if ((m = /^(\d{1,2})[\s-]*([A-Za-z]{3,9})\.?[\s,-]*(\d{2}|\d{4})$/.exec(str))) { d = +m[1]; mo = monthNum(m[2]); y = +m[3]; }
+            else if ((m = /^([A-Za-z]{3,9})\.?\s*(\d{1,2})(?:st|nd|rd|th)?,?\s*(\d{4})$/.exec(str))) { mo = monthNum(m[1]); d = +m[2]; y = +m[3]; }
+            else return null;
+            if (y < 100) y += 2000;
+            if (mo < 1) return null;
             var check = new Date(y, mo - 1, d);
             if (check.getFullYear() !== y || check.getMonth() !== mo - 1 || check.getDate() !== d) return null;
             return { y: y, m: mo, d: d };
@@ -635,12 +640,20 @@
             return (c.name ? c.name + ': ' : '') + dateRange(c);
         }
 
-        // Status column: Open / Sold Out / Coming Soon / Hidden (anything else counts as Coming Soon)
+        // Status column. Open: "Open", "Enrolling Now", "Enrollment Open"...
+        // Sold out: "Sold Out", "Full". Hidden: "Hidden". Anything else counts as Coming Soon.
+        function normalizeStatus(raw) {
+            var s = String(raw).toLowerCase();
+            if (/hid/.test(s)) return 'hidden';
+            if (/sold|full|closed/.test(s)) return 'soldout';
+            if (/open|enrol/.test(s)) return 'open';
+            return 'comingsoon';
+        }
         function buildCohorts(records) {
             var now = Date.now();
             var list = [];
             records.forEach(function (r, i) {
-                var status = (r['status'] || '').toLowerCase().replace(/[^a-z]/g, '');
+                var status = normalizeStatus(r['status'] || '');
                 if (status === 'hidden') return;
                 var c = {
                     name: r['cohort'] || '',
