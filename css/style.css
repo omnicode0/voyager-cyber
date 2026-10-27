@@ -374,6 +374,58 @@ video, iframe {
   cursor: not-allowed;
 }
 
+.enroll-wizard {
+  max-width: 720px;
+}
+
+.enroll-steps {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.enroll-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.enroll-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  font-size: 0.85rem;
+}
+
+.enroll-steps li.is-active {
+  color: var(--dark);
+}
+
+.enroll-steps li.is-active .enroll-step-num {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.enroll-steps li.is-done {
+  color: var(--primary-dark);
+}
+
+.enroll-summary-row {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
 @media (max-width: 575.98px) {
   .cohort-row-status {
     text-align: left;
