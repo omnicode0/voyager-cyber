@@ -14,6 +14,8 @@ The sheet is published (File → Share → Publish to web, CSV), and its link is
 | End Date | Same format. |
 | Enroll By | Last day to enroll. Enrollment closes at 11:59 PM Eastern that day, and the cohort then drops off the site automatically. |
 | Schedule | Optional. Defaults to `Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET`. |
+| Seats | Optional. How many seats the class has (default 15). Checkout stops when they're gone, and the site shows "Only N seats left" under 5. |
+| Calendar Link | Optional. A Google Calendar link for the class, included in the welcome email. |
 | Class ID | Optional but recommended, e.g. `27-001`. Sent to Stripe to identify the class. Without it the start date is used, e.g. `2027-06-25`; two classes with the same start date get `2027-06-25` and `2027-06-25-2` in sheet order, so adding a Class ID is clearer. Never change it after a class has sales. |
 | Notes | For you only. Never shown on the site. |
 
@@ -32,10 +34,12 @@ When no cohort is Open, every buy button changes to "Join the Waitlist".
 1. **Date** — on the pricing page (`pricing.html`). Every class is listed; open ones have a **Select this date** button. This is the only way into enrollment.
 2. **Option** — on the enrollment page (`enroll.html`): Starter, Professional, Career Accelerator, Workforce Training or Workforce Certification.
 3. **Review** — the class and option, each with a Change link, plus the refund and terms notes.
-4. **Stripe** is the last step: "Continue to Secure Payment" goes to that option's Stripe Payment Link with `?client_reference_id=cohort_<Class ID>` added. Stripe stores that value on the payment, so each payment shows which class it was for.
+4. **Stripe** is the last step: "Continue to Secure Payment" asks the backend (`voyager-cyber-api`) for a checkout. The backend re-checks the class in the sheet, reserves the seats, and sends the buyer to Stripe. After payment the buyer lands on `enrolled.html`, is enrolled in that exact class, and gets a welcome email with that class's dates, schedule and calendar link.
+
+Team options ask for the number of employees (3 or more) on the review step. When a class has fewer than 3 seats left, team options can't be picked for it. If a class fills up while someone is enrolling, they're sent back to the class list with a "just sold out" notice.
 
 "Change date", Back on the option step, and the "1 Date" step marker all return to the class list on the pricing page. If a class closes, or a link points at a class that isn't open, the visitor is sent back to the class list with a notice.
 
-Option names, prices, features and Stripe Payment Links are set in one place: the `TIERS` list in `js/schedule.js`. The exam-voucher add-on still goes straight to Stripe because it isn't tied to a class.
+Option names, displayed prices and features are in the `TIERS` list in `js/schedule.js`. The amount actually charged comes from each option's Stripe Payment Link (the backend reads it), so if you change a price in Stripe, update the displayed price there too. The exam-voucher add-on still goes straight to Stripe because it isn't tied to a class.
 
-**Before setting a cohort to Open:** the `voyager-cyber-api` webhook assigns every order to the single *active* cohort in D1 and sends that cohort's welcome email. Make the new cohort the active one in D1 and update the welcome email (dates, calendar link), or change the webhook to read `client_reference_id`. Otherwise buyers get booked into, and emailed about, the wrong class.
+Seat limits and class assignment are handled by the backend. Its setup is in the `voyager-cyber-api` README.

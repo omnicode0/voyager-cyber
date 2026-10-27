@@ -11,7 +11,7 @@
     var panel = document.getElementById('step-panel');
     var stepsEl = document.getElementById('enroll-steps');
     var alertEl = document.getElementById('enroll-alert');
-    var data = null; // { cohorts, bookable }
+    var data = null; // { cohorts, bookable, avail } — avail: { classId: { total, remaining } } or null
 
     // ---- helpers ----
 
@@ -37,7 +37,7 @@
 
     function params() {
         var q = new URLSearchParams(window.location.search);
-        return { cohort: q.get('cohort') || '', tier: q.get('tier') || '', step: q.get('step') || '' };
+        return { cohort: q.get('cohort') || '', tier: q.get('tier') || '', step: q.get('step') || '', qty: q.get('qty') || '' };
     }
 
     function findCohort(id) {
@@ -46,6 +46,26 @@
     }
 
     function stillOpen(c) { return c && c.enrollByDate.getTime() > Date.now(); }
+
+    // Seats left in a class, or null if unknown (backend unreachable)
+    function remaining(c) {
+        var a = data.avail && data.avail[c.id];
+        return a && typeof a.remaining === 'number' ? a.remaining : null;
+    }
+
+    // Why an option can't be bought for this class ('' if it can)
+    function tierBlocked(t, c) {
+        var left = remaining(c);
+        if (t.group === 'team' && left !== null && left < VS.TEAM_MIN) {
+            return 'Needs ' + VS.TEAM_MIN + '+ seats — only ' + left + ' left in this class';
+        }
+        return '';
+    }
+
+    function seatsNote(c) {
+        var left = remaining(c);
+        return left !== null && left > 0 && left < 5 ? 'Only ' + left + ' seat' + (left === 1 ? '' : 's') + ' left' : '';
+    }
 
     function showAlert(msg) {
         alertEl.textContent = msg || '';
@@ -115,10 +135,14 @@
         var body = card();
         body.appendChild(el('h2', 'h5 fw-bold mb-1', 'Choose your option'));
         var picked = el('p', 'small text-muted mb-3', 'Class: ' + VS.title(cohort) + ' · ');
+        if (seatsNote(cohort)) {
+            picked.appendChild(el('span', 'fw-bold text-danger', seatsNote(cohort)));
+            picked.appendChild(document.createTextNode(' · '));
+        }
         picked.appendChild(link('small', 'Change date', DATES_URL));
         body.appendChild(picked);
 
-        var selected = VS.tier(p.tier) ? p.tier : 'professional';
+        var selected = VS.tier(p.tier) && !tierBlocked(VS.tier(p.tier), cohort) ? p.tier : 'professional';
         [['individual', 'For individuals'], ['team', 'For teams & employers (3+ employees)']].forEach(function (g) {
             body.appendChild(el('h3', 'h6 text-uppercase text-muted mt-3 mb-2', g[1]));
             VS.TIERS.filter(function (t) { return t.group === g[0]; }).forEach(function (t) {
@@ -128,7 +152,10 @@
                 head.appendChild(name);
                 head.appendChild(el('span', 'fw-bold', t.price + (t.per ? ' ' + t.per : '')));
                 var feats = el('span', 'd-block small text-muted', t.features.join(' · '));
-                body.appendChild(radioOption('tier', t.key, t.key === selected, false, [head, feats],
+                var nodes = [head, feats];
+                var blocked = tierBlocked(t, cohort);
+                if (blocked) nodes.push(el('span', 'd-block small fw-bold', blocked));
+                body.appendChild(radioOption('tier', t.key, t.key === selected, !!blocked, nodes,
                     function (v) { selected = v; }));
             });
         });
@@ -167,8 +194,30 @@
             el('div', 'fw-bold', tier.name + ' — ' + tier.price + (tier.per ? ' ' + tier.per : '')),
             el('div', 'small text-muted', tier.features.join(' · '))
         ];
+        var left = remaining(cohort);
+        var maxQty = Math.min(VS.TEAM_MAX, left === null ? VS.TEAM_MAX : left);
+        var qtyInput = null;
         if (tier.group === 'team') {
-            tierNodes.push(el('div', 'small', 'Enter the number of employees (3 or more) on the payment page.'));
+            var qWrap = el('div', 'mt-2');
+            var qLabel = el('label', 'form-label small fw-bold mb-1', 'Number of employees');
+            qLabel.setAttribute('for', 'enroll-qty');
+            qtyInput = el('input', 'form-control');
+            qtyInput.id = 'enroll-qty';
+            qtyInput.type = 'number';
+            qtyInput.inputMode = 'numeric';
+            qtyInput.min = String(VS.TEAM_MIN);
+            qtyInput.max = String(maxQty);
+            qtyInput.step = '1';
+            qtyInput.style.maxWidth = '8rem';
+            var startQty = parseInt(p.qty, 10);
+            qtyInput.value = String(startQty >= VS.TEAM_MIN && startQty <= maxQty ? startQty : VS.TEAM_MIN);
+            qWrap.appendChild(qLabel);
+            qWrap.appendChild(qtyInput);
+            qWrap.appendChild(el('div', 'form-text', VS.TEAM_MIN + '–' + maxQty + ' employees' +
+                (left !== null && left < VS.TEAM_MAX ? ' (' + left + ' seats left in this class)' : '') + '. You’ll pay ' + tier.price + ' per employee.'));
+            tierNodes.push(qWrap);
+        } else if (seatsNote(cohort)) {
+            tierNodes.push(el('div', 'small fw-bold text-danger', seatsNote(cohort)));
         }
         body.appendChild(summaryRow('Option', tierNodes,
             function () { go({ cohort: cohort.id, tier: tier.key, step: 'option' }); }));
@@ -189,15 +238,47 @@
         bar.appendChild(button('btn btn-outline-secondary', 'Back', function () {
             go({ cohort: cohort.id, tier: tier.key, step: 'option' });
         }));
-        var pay = link('btn btn-primary px-4 fw-bold flex-grow-1 flex-sm-grow-0', 'Continue to Secure Payment', VS.checkoutUrl(tier, cohort));
-        pay.id = 'enroll-pay';
-        pay.addEventListener('click', function (e) {
+        var payLabel = 'Continue to Secure Payment';
+        var pay = button('btn btn-primary px-4 fw-bold flex-grow-1 flex-sm-grow-0', payLabel, function () {
             // Enrollment may have closed while the page was open
             if (!stillOpen(cohort)) {
-                e.preventDefault();
                 window.location.href = 'pricing.html?notice=closed#book-training';
+                return;
             }
+            var qty = 1;
+            if (qtyInput) {
+                qty = Number(qtyInput.value);
+                if (!(Math.floor(qty) === qty && qty >= VS.TEAM_MIN && qty <= maxQty)) {
+                    showAlert('Please enter between ' + VS.TEAM_MIN + ' and ' + maxQty + ' employees.');
+                    qtyInput.focus();
+                    return;
+                }
+                // Keep the number in the URL so Back from Stripe restores it
+                history.replaceState(null, '', VS.enrollUrl({ cohort: cohort.id, tier: tier.key, step: 'review', qty: qty }));
+            }
+            showAlert('');
+            pay.disabled = true;
+            pay.textContent = 'Opening secure checkout…';
+            VS.startCheckout(cohort, tier, qty).then(function (r) {
+                if (r && r.url) {
+                    window.location.href = r.url;
+                    return;
+                }
+                pay.disabled = false;
+                pay.textContent = payLabel;
+                if (r && (r.error === 'sold_out' || r.error === 'closed')) {
+                    window.location.href = 'pricing.html?notice=' + (r.error === 'sold_out' ? 'soldout' : 'closed') + '#book-training';
+                    return;
+                }
+                if (r && r.error === 'not_enough_seats' && typeof r.remaining === 'number') {
+                    data.avail = data.avail || {};
+                    data.avail[cohort.id] = { total: (data.avail[cohort.id] || {}).total, remaining: r.remaining };
+                    render();
+                }
+                showAlert((r && r.message) || 'Something went wrong starting checkout. Please try again, or email info@voyagercyber.com.');
+            });
         });
+        pay.id = 'enroll-pay';
         bar.appendChild(pay);
         body.appendChild(bar);
     }
@@ -214,9 +295,14 @@
             window.location.replace(p.cohort ? 'pricing.html?notice=closed#book-training' : DATES_URL);
             return;
         }
+        if (remaining(cohort) === 0) {
+            window.location.replace('pricing.html?notice=soldout#book-training');
+            return;
+        }
+        if (tier && tierBlocked(tier, cohort)) tier = null;
         var step = p.step === 'review' && tier ? 'review' : 'option';
         if (p.step && p.step !== step) {
-            history.replaceState(null, '', VS.enrollUrl({ cohort: cohort.id, tier: p.tier, step: step }));
+            history.replaceState(null, '', VS.enrollUrl({ cohort: cohort.id, tier: tier ? tier.key : p.tier, step: step, qty: p.qty }));
         }
 
         setStepper(step);
@@ -225,9 +311,12 @@
     }
 
     window.addEventListener('popstate', function () { if (data) render(); });
+    // Coming back from Stripe with the browser's Back button: reset the payment button
+    window.addEventListener('pageshow', function (e) { if (e.persisted && data) render(); });
 
-    VS.load().then(function (result) {
-        data = result;
+    Promise.all([VS.load(), VS.loadAvailability()]).then(function (results) {
+        data = results[0];
+        data.avail = results[1];
         render();
     });
 })();

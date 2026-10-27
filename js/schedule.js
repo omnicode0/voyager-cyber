@@ -9,33 +9,32 @@
     var SCHEDULE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9XTpBOx6Iv56S28Up7QZ7CAfcl6jWCaic17l_r4enpLKBzYaoZVr5BomF8b81FWjM5chbCj3mDExh/pub?gid=956183842&single=true&output=csv';
     var FALLBACK_CSV_URL = 'cohorts.csv';
     var DEFAULT_SCHEDULE = 'Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET';
+    // Backend (voyager-cyber-api): seat counts and Stripe checkout
+    var API_BASE = 'https://api.voyagercyber.com';
+    var TEAM_MIN = 3, TEAM_MAX = 50;
 
-    // Enrollment options. Stripe Payment Links live here and nowhere else.
+    // Enrollment options shown on enroll.html. Prices here are for display; the amount charged
+    // comes from each option's Stripe Payment Link (read by the backend), so keep them in sync.
     var TIERS = [
         {
             key: 'starter', group: 'individual', name: 'Starter', price: '$1,299',
-            features: ['5 weeks live instruction', 'Digital course materials', 'Practice exam access'],
-            checkout: 'https://buy.stripe.com/6oUeVdfaa7QOgK7dMbeIw0c'
+            features: ['5 weeks live instruction', 'Digital course materials', 'Practice exam access']
         },
         {
             key: 'professional', group: 'individual', name: 'Professional', price: '$1,799', popular: true,
-            features: ['Everything in Starter', 'Exam voucher included', 'Exam retake support included'],
-            checkout: 'https://buy.stripe.com/7sYeVd2noc7465tcI7eIw0b'
+            features: ['Everything in Starter', 'Exam voucher included', 'Exam retake support included']
         },
         {
             key: 'career', group: 'individual', name: 'Career Accelerator', price: '$2,299',
-            features: ['Everything in Professional', '3x private coaching sessions ($900+ value)', 'Resume review & career plan', 'Mock interview prep'],
-            checkout: 'https://buy.stripe.com/9B6eVdbXY2wufG39vVeIw0a'
+            features: ['Everything in Professional', '3x private coaching sessions ($900+ value)', 'Resume review & career plan', 'Mock interview prep']
         },
         {
             key: 'workforce', group: 'team', name: 'Workforce Training', price: '$1,099', per: '/ employee',
-            features: ['35 hours live training', 'Course materials and practice exams'],
-            checkout: 'https://book.stripe.com/cNieVd4vw4ECalJfUjeIw09'
+            features: ['35 hours live training', 'Course materials and practice exams']
         },
         {
             key: 'workforce-cert', group: 'team', name: 'Workforce Certification', price: '$1,599', per: '/ employee',
-            features: ['35 hours live training', 'Course materials and practice exams', 'Security+ exam voucher with test retake support'],
-            checkout: 'https://book.stripe.com/8x23cv8LM7QO65teQfeIw0d'
+            features: ['35 hours live training', 'Course materials and practice exams', 'Security+ exam voucher with test retake support']
         }
     ];
 
@@ -224,12 +223,27 @@
         return null;
     }
 
-    // The final hand-off to Stripe. client_reference_id is stored on the payment,
-    // so every Stripe payment records which class it was for.
-    function checkoutUrl(t, c) {
-        var url = new URL(t.checkout);
-        url.searchParams.set('client_reference_id', 'cohort_' + c.id);
-        return url.toString();
+    // Seats left per class from the backend: { classId: { total, remaining } }. Resolves to null
+    // if the backend can't be reached (the site then shows no counts; checkout still enforces seats).
+    function loadAvailability() {
+        return fetch(API_BASE + '/api/availability', { cache: 'no-cache' })
+            .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+            .then(function (d) { return d && d.classes ? d.classes : null; })
+            .catch(function () { return null; });
+    }
+
+    // Asks the backend for a Stripe Checkout for this class + option. The backend re-checks the
+    // class, reserves the seats and returns { url }; on failure { error, message }.
+    function startCheckout(c, t, quantity) {
+        return fetch(API_BASE + '/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ classId: c.id, tier: t.key, quantity: quantity })
+        }).then(function (res) {
+            return res.json().catch(function () { return {}; });
+        }, function () {
+            return { error: 'network', message: 'We couldn’t reach checkout. Please check your connection and try again, or email info@voyagercyber.com.' };
+        });
     }
 
     function enrollUrl(params) {
@@ -244,7 +258,10 @@
         TIERS: TIERS,
         load: load,
         tier: tier,
-        checkoutUrl: checkoutUrl,
+        loadAvailability: loadAvailability,
+        startCheckout: startCheckout,
+        TEAM_MIN: TEAM_MIN,
+        TEAM_MAX: TEAM_MAX,
         enrollUrl: enrollUrl,
         fmt: fmt,
         fmtDeadline: fmtDeadline,

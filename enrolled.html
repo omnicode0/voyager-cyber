@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You’re Enrolled | Voyager Cyber</title>
+    <meta name="description" content="Your Security+ Bootcamp enrollment is confirmed.">
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="canonical" href="https://voyagercyber.com/enrolled.html">
+    <link rel="icon" type="image/png" href="/img/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <link rel="shortcut icon" href="/img/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
+    <link rel="manifest" href="/img/site.webmanifest" />
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="img/logo-70.webp" alt="Voyager Cyber logo featuring a dark digital globe encircled by glowing blue network orbits and nodes" height="70" width="70" class="me-2">
+                <span class="fw-semibold fs-5 text-white">Voyager Cyber Academy</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link px-3 fw-bold" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-bold" href="about.html">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-bold" href="courses.html">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link px-3 fw-bold" href="pricing.html">Pricing / Schedule</a></li>
+                    <li class="nav-item ms-lg-4">
+                        <a class="btn btn-primary rounded-pill px-4 py-2 fw-bold" href="pricing.html#book-training">Book Training</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="py-5 bg-light">
+        <div class="container enroll-wizard text-center">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <div class="display-6 text-success mb-2" aria-hidden="true">✓</div>
+                    <h1 class="h3 fw-bold mb-3">You’re enrolled — thank you!</h1>
+                    <p class="mb-2">Your payment went through and your seat is reserved.</p>
+                    <p class="mb-4">A welcome email with your class dates, schedule, calendar link and Discord invite is on its way.
+                    If you don’t see it within 15 minutes, check your spam folder or email
+                    <a href="mailto:info@voyagercyber.com">info@voyagercyber.com</a>.</p>
+                    <a class="btn btn-primary" href="courses.html">Preview the Course</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-5 bg-dark text-white text-center">
+        <div class="container">
+            <p class="mb-1">Voyager Career and Consulting LLC</p>
+            <p class="mb-1">(402) 282-1887 | <a href="mailto:info@voyagercyber.com">info@voyagercyber.com</a></p>
+            <p class="mb-0">663 N 132nd St, Suite 7209<br>Omaha, NE 68154</p>
+            <hr class="border-secondary">
+            <p class="small text-muted mb-0">© 2026 Voyager Career and Consulting LLC. All rights reserved.</p>
+            <p class="small mb-0">
+                <a href="privacy.html" class="text-muted me-3">Privacy Policy</a>
+                <a href="terms.html" class="text-muted me-3">Terms of Service</a>
+                <a href="refund.html" class="text-muted">Refund Policy</a>
+            </p>
+        </div>
+    </footer>
+
+    <div id="cookie-banner" style="display:none;">
+        <p class="mb-0">
+        This site uses cookies and third-party services (including Google Analytics, Microsoft Clarity, and Stripe) to improve your experience, track site performance, and process payments. By continuing, you acknowledge this. See our <a href="privacy.html">Privacy Policy</a>.
+        </p>
+        <button class="btn btn-sm btn-primary ms-3" onclick="acceptCookies()">Got it</button>
+    </div>
+
+    <script>
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    if (!localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'flex';
+    }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="text/javascript">
+    var _clarityInit = false;
+    function initClarity() {
+        if (_clarityInit) return;
+        _clarityInit = true;
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "x96fowp9jv");
+    }
+    window.addEventListener('load', initClarity);
+    setTimeout(initClarity, 3000);
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W0LNRL78V9"></script>
+    <script>
+    var _gaInit = false;
+    function initGA() {
+        if (_gaInit) return;
+        _gaInit = true;
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-W0LNRL78V9');
+    }
+    window.addEventListener('load', initGA);
+    setTimeout(initGA, 3000);
+    </script>
+</body>
+</html>
