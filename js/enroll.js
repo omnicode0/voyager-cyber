@@ -1,12 +1,12 @@
 /*
- * Enrollment page. Step 1 (the class date) is picked on pricing.html ("Select this date"),
+ * Enrollment page. Step 1 (the class date) is picked on schedule.html ("Select this date"),
  * which opens enroll.html?cohort=<id>. This page handles 2. pick an option → 3. review →
  * Stripe checkout. Choices live in the URL (…&tier=…&step=…), so the browser's Back button works.
  */
 (function () {
     var VS = window.VoyagerSchedule;
     var STEPS = ['date', 'option', 'review'];
-    var DATES_URL = 'pricing.html#book-training';
+    var DATES_URL = 'schedule.html#book-training';
 
     var panel = document.getElementById('step-panel');
     var stepsEl = document.getElementById('enroll-steps');
@@ -134,7 +134,7 @@
     function renderOption(p, cohort) {
         var body = card();
         body.appendChild(el('h2', 'h5 fw-bold mb-1', 'Choose your option'));
-        var picked = el('p', 'small text-muted mb-3', 'Class: ' + VS.title(cohort) + ' · ');
+        var picked = el('p', 'small text-muted mb-3', 'Class: ' + (cohort.name ? cohort.name + ': ' : '') + VS.dateRangeWithDays(cohort) + ' · ');
         if (seatsNote(cohort)) {
             picked.appendChild(el('span', 'fw-bold text-danger', seatsNote(cohort)));
             picked.appendChild(document.createTextNode(' · '));
@@ -184,11 +184,13 @@
         var body = card();
         body.appendChild(el('h2', 'h5 fw-bold mb-3', 'Review your enrollment'));
 
-        body.appendChild(summaryRow('Class', [
-            el('div', 'fw-bold', VS.title(cohort)),
-            el('div', 'small text-muted', cohort.schedule),
-            el('div', 'small', 'Enrollment closes ' + VS.fmtDeadline(cohort) + ' at 11:59 PM ET')
-        ], function () { window.location.href = DATES_URL; }));
+        var classNodes = [];
+        if (cohort.name) classNodes.push(el('div', 'fw-bold', cohort.name));
+        classNodes.push(el('div', cohort.name ? '' : 'fw-bold', 'Starts ' + VS.longDate(cohort.startDate)));
+        classNodes.push(el('div', '', 'Ends ' + VS.longDate(cohort.endDate)));
+        classNodes.push(el('div', 'small text-muted', cohort.schedule));
+        classNodes.push(el('div', 'small', 'Enrollment closes ' + VS.longDeadline(cohort) + ' at 11:59 PM ET'));
+        body.appendChild(summaryRow('Class', classNodes, function () { window.location.href = DATES_URL; }));
 
         var tierNodes = [
             el('div', 'fw-bold', tier.name + ' — ' + tier.price + (tier.per ? ' ' + tier.per : '')),
@@ -242,7 +244,7 @@
         var pay = button('btn btn-primary px-4 fw-bold flex-grow-1 flex-sm-grow-0', payLabel, function () {
             // Enrollment may have closed while the page was open
             if (!stillOpen(cohort)) {
-                window.location.href = 'pricing.html?notice=closed#book-training';
+                window.location.href = 'schedule.html?notice=closed#book-training';
                 return;
             }
             var qty = 1;
@@ -267,7 +269,7 @@
                 pay.disabled = false;
                 pay.textContent = payLabel;
                 if (r && (r.error === 'sold_out' || r.error === 'closed')) {
-                    window.location.href = 'pricing.html?notice=' + (r.error === 'sold_out' ? 'soldout' : 'closed') + '#book-training';
+                    window.location.href = 'schedule.html?notice=' + (r.error === 'sold_out' ? 'soldout' : 'closed') + '#book-training';
                     return;
                 }
                 if (r && r.error === 'not_enough_seats' && typeof r.remaining === 'number') {
@@ -292,11 +294,11 @@
 
         // No valid open class chosen: the date is picked on the pricing page
         if (!cohort) {
-            window.location.replace(p.cohort ? 'pricing.html?notice=closed#book-training' : DATES_URL);
+            window.location.replace(p.cohort ? 'schedule.html?notice=closed#book-training' : DATES_URL);
             return;
         }
         if (remaining(cohort) === 0) {
-            window.location.replace('pricing.html?notice=soldout#book-training');
+            window.location.replace('schedule.html?notice=soldout#book-training');
             return;
         }
         if (tier && tierBlocked(tier, cohort)) tier = null;

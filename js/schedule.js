@@ -1,5 +1,5 @@
 /*
- * Voyager Cyber — class schedule + enrollment options (shared by pricing.html and enroll.html)
+ * Voyager Cyber — class schedule + enrollment options (shared by schedule.html and enroll.html)
  *
  * Class dates come from the "Voyager Cyber — Website Class Schedule" Google Sheet (published
  * as CSV). If the sheet can't be reached, cohorts.csv in this repo is used instead.
@@ -114,6 +114,23 @@
 
     function fmtDeadline(c) {
         return c.enrollByDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });
+    }
+
+    // With weekdays: "Thu, Mar 25 – Sun, May 2, 2027"
+    function dateRangeWithDays(c) {
+        var sameYear = c.startDate.getFullYear() === c.endDate.getFullYear();
+        var o = { weekday: 'short', month: 'short', day: 'numeric' };
+        var oy = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+        return c.startDate.toLocaleDateString('en-US', sameYear ? o : oy) + ' – ' + c.endDate.toLocaleDateString('en-US', oy);
+    }
+
+    // "Thursday, March 25, 2027"
+    function longDate(d) {
+        return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function longDeadline(c) {
+        return c.enrollByDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' });
     }
 
     function dateRange(c) {
@@ -266,6 +283,9 @@
         fmt: fmt,
         fmtDeadline: fmtDeadline,
         dateRange: dateRange,
+        dateRangeWithDays: dateRangeWithDays,
+        longDate: longDate,
+        longDeadline: longDeadline,
         timeLeft: timeLeft,
         title: title,
         // exposed for testing
