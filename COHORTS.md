@@ -13,7 +13,7 @@ The sheet is published (File → Share → Publish to web, CSV), and its link is
 | Start Date | Any of `25Jun2027`, `25 Jun 2027`, `Jun 25, 2027`, `6/25/2027`, `2027-06-25`. |
 | End Date | Same format. |
 | Enroll By | Last day to enroll. Enrollment closes at 11:59 PM Eastern that day, and the cohort then drops off the site automatically. |
-| Schedule | Optional. Defaults to `Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET`. |
+| Schedule | Optional. Defaults to `Wednesdays 7–11 PM ET · Saturdays 10 AM–2 PM ET`. |
 | Seats | Optional. How many seats the class has (default 15). Checkout stops when they're gone, and the site shows "Only N seats left" under 5. |
 | Calendar Link | Optional. A Google Calendar link for the class, included in the welcome email. |
 | Class ID | Optional but recommended, e.g. `27-001`. Sent to Stripe to identify the class. Without it the start date is used, e.g. `2027-06-25`; two classes with the same start date get `2027-06-25` and `2027-06-25-2` in sheet order, so adding a Class ID is clearer. Never change it after a class has sales. |

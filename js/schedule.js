@@ -8,7 +8,7 @@
 (function () {
     var SCHEDULE_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR9XTpBOx6Iv56S28Up7QZ7CAfcl6jWCaic17l_r4enpLKBzYaoZVr5BomF8b81FWjM5chbCj3mDExh/pub?gid=956183842&single=true&output=csv';
     var FALLBACK_CSV_URL = 'cohorts.csv';
-    var DEFAULT_SCHEDULE = 'Wednesdays 7–11 PM ET · Saturdays 9 AM–12 PM ET';
+    var DEFAULT_SCHEDULE = 'Wednesdays 7–11 PM ET · Saturdays 10 AM–2 PM ET';
     // Backend (voyager-cyber-api): seat counts and Stripe checkout
     var API_BASE = 'https://api.voyagercyber.com';
     var TEAM_MIN = 3, TEAM_MAX = 50;
@@ -18,7 +18,7 @@
     var TIERS = [
         {
             key: 'starter', group: 'individual', name: 'Starter', price: '$1,299',
-            features: ['5 weeks live instruction', 'Digital course materials', 'Practice exam access']
+            features: ['4 weeks of live instruction (8 sessions)', 'Digital course materials', 'Practice exam access']
         },
         {
             key: 'professional', group: 'individual', name: 'Professional', price: '$1,799', popular: true,
@@ -30,11 +30,11 @@
         },
         {
             key: 'workforce', group: 'team', name: 'Workforce Training', price: '$1,099', per: '/ employee',
-            features: ['35 hours live training', 'Course materials and practice exams']
+            features: ['32 hours live training (8 sessions)', 'Course materials and practice exams']
         },
         {
             key: 'workforce-cert', group: 'team', name: 'Workforce Certification', price: '$1,599', per: '/ employee',
-            features: ['35 hours live training', 'Course materials and practice exams', 'Security+ exam voucher with test retake support']
+            features: ['32 hours live training (8 sessions)', 'Course materials and practice exams', 'Security+ exam voucher with test retake support']
         }
     ];
 
