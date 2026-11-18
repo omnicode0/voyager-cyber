@@ -327,24 +327,117 @@ video, iframe {
 }
 
 
-/* --- countdown timer --- */
+/* --- cohort list + chooser (pricing page) --- */
 
-
-.countdown-container {
-  text-align: center;
-  margin: 2rem 0 0.5rem;
+.cohort-list {
+  max-width: 760px;
 }
 
-.countdown-label {
-  font-size: 1rem;
-  color: #666;
+.cohort-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  background: var(--white);
   margin-bottom: 0.5rem;
 }
 
-.countdown {
-  font-size: 2rem;
+.cohort-row-status {
+  text-align: right;
+}
+
+.cohort-row.is-sold-out {
+  opacity: 0.6;
+}
+
+.cohort-option {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.cohort-option:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--bs-primary-bg-subtle);
+}
+
+.cohort-option.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.enroll-wizard {
+  max-width: 720px;
+}
+
+.enroll-steps {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
   font-weight: 700;
-  color: #dc2626;
+  color: var(--text-muted);
+}
+
+.enroll-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.enroll-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  font-size: 0.85rem;
+}
+
+.enroll-steps li.is-active {
+  color: var(--dark);
+}
+
+.enroll-steps li.is-active .enroll-step-num {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+.enroll-steps li.is-done {
+  color: var(--primary-dark);
+}
+
+.enroll-step-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.enroll-summary-row {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+@media (max-width: 575.98px) {
+  .cohort-row-status {
+    text-align: left;
+  }
 }
 
 /* --- hamburger menu --- */
